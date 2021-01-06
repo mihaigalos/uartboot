@@ -23,7 +23,7 @@ jobs:
           sudo dpkg -i bazel_3.4.1-linux-x86_64.deb
           sudo apt install lcov
           sudo apt install pkg-config
+
       - name: Build and Test
         run: |
           bazel query //... | grep test_ | xargs bazel test --color=yes 2>&1 
-
