@@ -25,5 +25,5 @@ jobs:
           sudo apt install pkg-config
       - name: Build and Test
         run: |
-          bazel test --color=yes //... 2>&1
+          bazel query //... | grep test_ | xargs bazel test --color=yes 2>&1 
 
