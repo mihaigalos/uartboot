@@ -64,6 +64,7 @@ cc_binary(
     }),
     includes = [
         "mcu",
+        "avr-bootloader-common",
     ],
     linkopts = select({
         ":avr": DEFAULT_COMPILER_OPTIONS,

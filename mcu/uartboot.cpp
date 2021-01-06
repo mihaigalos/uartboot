@@ -4,6 +4,8 @@
 #include "uartboot.h"
 #include "software_uart/software_uart.h"
 
+#include <avr-bootloader-common/crc32.h>
+
 constexpr uint8_t kStartOfHeading PROGMEM{0x01};
 constexpr uint8_t kWaitForDataStartBootloader PROGMEM{5};
 

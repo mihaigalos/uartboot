@@ -37,7 +37,7 @@ cc_library(
 
 git_repository(
     name = "avr-bootloader-common",
-    commit = "9a818b6c2aa36474f69b2bd3ef2a916d850f2c2a",
+    commit = "d38372e0ebf57726bed1d96b7dfb083b13f34216",
     remote = "https://github.com/mihaigalos/avr-bootloader-common",
-    shallow_since = "1609926745 +0100",
+    shallow_since = "1609929038 +0100"
 )
