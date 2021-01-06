@@ -12,7 +12,7 @@ git_repository(
     name = "gtest",
     commit = "13a433a94dd9c7e55907d7a9b75f44ff82f309eb",
     remote = "https://github.com/google/googletest",
-    shallow_since = "1591825059 -0400",
+    shallow_since = "1591825059 -0400", 
 )
 
 git_repository(

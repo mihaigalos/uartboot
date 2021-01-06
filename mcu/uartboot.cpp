@@ -1,25 +1,18 @@
-#include "config.h"
-
-#include <avr-bootloader-common/all.h>
-#include <util/delay.h>
-
 #include "uartboot.h"
-#include "software_uart/software_uart.h"
 
-constexpr uint8_t kStartOfHeading PROGMEM{0x01};
-constexpr uint8_t kWaitForDataStartBootloader PROGMEM{5};
-
-int main()
+bool UartBoot::isReflashNecessary(uint32_t &application_timestamp)
 {
-    uint8_t wait_for_data{kWaitForDataStartBootloader};
-    bool done{false};
-    do
-    {
-        if (uart_read() == kStartOfHeading)
-        {
-            done = true;
-        }
+    uint32_t current_application_timestamp =
+        readLatestApplicationTimestampFromInternalEeprom();
 
-        _delay_ms(1000);
-    } while (!--wait_for_data && !done);
+    application_timestamp =
+        static_cast<uint32_t>(readWordFromMetadata(timestamp_application_byte_offset))
+        << 16;
+    application_timestamp |= static_cast<uint32_t>(readWordFromMetadata(timestamp_application_byte_offset + 2));
+
+    if (eeprom_not_programmed == current_application_timestamp)
+        return true;
+    if (application_timestamp != current_application_timestamp)
+        return true;
+    return false;
 }
