@@ -7,30 +7,6 @@ EEPROM_CONFIGURATION_START_BYTE = "0x03F6"
 
 F_CPU = "8000000UL"
 
-config_setting(
-    name = "avr",
-    values = {
-        "cpu": "avr",
-    },
-)
-
-genrule(
-    name = "gen_bootloader_h",
-    srcs = ["host/uartboot.cpp"],
-    outs = ["bootloader.h"],
-    cmd = "printf \"%s\n%s %s\n%s %s\" " +
-          "\"#pragma once\" " +
-          "\"#define BOOTLOADER_START_ADDRESS \" \"" + BOOTLOADER_START_ADDRESS + "\" " +
-          "\"#define EEPROM_CONFIGURATION_START_BYTE \" \"" + EEPROM_CONFIGURATION_START_BYTE +
-          "\" >$@",
-)
-
-cc_library(
-    name = "bootloader_h",
-    srcs = [":gen_bootloader_h"],
-    linkstatic=1,
-)
-
 DEFAULT_COMPILER_OPTIONS = [
     "-fdiagnostics-color",
     "-fpack-struct",
@@ -48,12 +24,37 @@ DEFAULT_COMPILER_OPTIONS = [
     "-Wl,-Map=uartboot.map,--cref",
 ]
 
+config_setting(
+    name = "avr",
+    values = {
+        "cpu": "avr",
+    },
+)
+
+genrule(
+    name = "gen_bootloader_h",
+    srcs = ["mcu/uartboot.cpp"],
+    outs = ["bootloader.h"],
+    cmd = "printf \"%s\n%s %s\n%s %s\" " +
+          "\"#pragma once\" " +
+          "\"#define BOOTLOADER_START_ADDRESS \" \"" + BOOTLOADER_START_ADDRESS + "\" " +
+          "\"#define EEPROM_CONFIGURATION_START_BYTE \" \"" + EEPROM_CONFIGURATION_START_BYTE +
+          "\" >$@",
+)
+
+cc_library(
+    name = "bootloader_h",
+    srcs = [":gen_bootloader_h"],
+    linkstatic=1,
+)
+
+
 cc_binary(
     name = "uartboot.elf",
     srcs = glob([
-        "host/*.cpp",
-        "host/*.c",
-        "host/*.h",
+        "mcu/**/*.cpp",
+        "mcu/**/*.c",
+        "mcu/**/*.h",
     ]),
     copts = select({
         ":avr": [
@@ -62,7 +63,7 @@ cc_binary(
         "//conditions:default": [],
     }),
     includes = [
-        "host",
+        "mcu",
     ],
     linkopts = select({
         ":avr": DEFAULT_COMPILER_OPTIONS,
