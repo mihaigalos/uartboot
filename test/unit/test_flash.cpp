@@ -51,7 +51,10 @@ TEST_F(Fixture, WriteOnePageOk_WhenTypical)
 
     sut_.writeOnePageToFlash(data);
 
-    uint16_t destinationAddress{data[kDestinationAddressOffset + 0] << 8 | data[kDestinationAddressOffset + 1]};
+    uint16_t destinationAddress{
+        static_cast<uint16_t>(static_cast<uint16_t>(data[kDestinationAddressOffset + 0]) << 8 |
+                              static_cast<uint16_t>(data[kDestinationAddressOffset + 1]))};
+
     for (auto i = 0; i < kPageSize; ++i)
     {
         ASSERT_EQ(data[i], sut_.emulated_flash_.data[destinationAddress + i]);
@@ -80,7 +83,9 @@ TEST_F(Fixture, WriteOnePageDoesNotWrite_WhenCRC32Mismatch)
 
     sut_.writeOnePageToFlash(data);
 
-    uint16_t destinationAddress{data[kDestinationAddressOffset + 0] << 8 | data[kDestinationAddressOffset + 1]};
+    uint16_t destinationAddress{
+        static_cast<uint16_t>(static_cast<uint16_t>(data[kDestinationAddressOffset + 0]) << 8 |
+                              static_cast<uint16_t>(data[kDestinationAddressOffset + 1]))};
 
     for (auto i = 1; i < kPageSize; ++i)
     {
