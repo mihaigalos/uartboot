@@ -1,8 +1,13 @@
 #include "uartboot.h"
 
-bool UartBoot::isReflashNecessary(uint32_t &application_timestamp)
+UartBoot::UartBoot()
 {
-    uint32_t current_application_timestamp =
+    init_table(&crc_table_[0]);
+}
+
+bool UartBoot::isReflashNecessary(uint32_t &application_timestamp) const
+{
+    const uint32_t current_application_timestamp =
         readLatestApplicationTimestampFromInternalEeprom();
 
     application_timestamp =
@@ -15,4 +20,12 @@ bool UartBoot::isReflashNecessary(uint32_t &application_timestamp)
     if (application_timestamp != current_application_timestamp)
         return true;
     return false;
+}
+
+bool UartBoot::isCrcOk(const uint8_t (&in)[kSizeOfFlashPage], const uint8_t length, const uint32_t &expectedCrc) const
+{
+    uint32_t crc{0};
+    crc32(reinterpret_cast<const void *>(&in[0]), length, &crc_table_[0],
+          &crc);
+    return crc == expectedCrc;
 }

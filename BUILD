@@ -110,7 +110,9 @@ cc_binary(
         ],
         linkopts = DEFAULT_TEST_LINK_OPTIONS,
         tags = ["component"],
-        deps = DEFAULT_TEST_DEPS,
+        deps = DEFAULT_TEST_DEPS+[
+             "@avr-bootloader-common",
+        ],
     )
     for component_name in [
         file_name.replace("test/component/", "").replace(".cpp", "")

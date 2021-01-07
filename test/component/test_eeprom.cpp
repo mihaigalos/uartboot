@@ -13,8 +13,8 @@ using ::testing::Return;
 class UartBootMock : public UartBoot
 {
 public:
-    MOCK_METHOD(uint32_t, readLatestApplicationTimestampFromInternalEeprom, (), (override));
-    MOCK_METHOD(uint16_t, readWordFromMetadata, (uint16_t), (override));
+    MOCK_METHOD(uint32_t, readLatestApplicationTimestampFromInternalEeprom, (), (const, override));
+    MOCK_METHOD(uint16_t, readWordFromMetadata, (uint16_t), (const, override));
 };
 
 class Fixture : public ::testing::Test

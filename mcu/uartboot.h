@@ -12,6 +12,8 @@
 #include "testing_helper.h"
 #endif // TESTING
 
+#include <avr-bootloader-common/crc32.h>
+
 #include <stdint.h>
 
 #ifdef __AVR__
@@ -22,18 +24,21 @@
 
 constexpr uint8_t kStartOfHeading PROGMEM{0x01};
 constexpr uint8_t kWaitForDataStartBootloader PROGMEM{5};
+constexpr uint8_t kSizeOfFlashPage PROGMEM{128};
 
 class UartBoot
 {
 public:
-    bool isReflashNecessary(uint32_t &application_timestamp);
+    UartBoot();
+    bool isReflashNecessary(uint32_t &application_timestamp) const;
+    virtual bool isCrcOk(const uint8_t (&in)[kSizeOfFlashPage], const uint8_t length, const uint32_t &expectedCrc) const;
 
 #ifdef TESTING
-    virtual uint32_t readLatestApplicationTimestampFromInternalEeprom()
+    virtual uint32_t readLatestApplicationTimestampFromInternalEeprom() const
     {
         return 0xFFFFFFFF;
     }
-    virtual uint16_t readWordFromMetadata(uint16_t address)
+    virtual uint16_t readWordFromMetadata(uint16_t address) const
     {
         return 0xFFFF;
     }
@@ -42,4 +47,7 @@ public:
     virtual void _delay_ms(uint16_t) {}
 #else // implementation from avr-bootloader-common
 #endif
+
+private:
+    uint32_t crc_table_[crc_table_size];
 };
