@@ -25,7 +25,7 @@ public:
 
     virtual uint8_t uart_read() { return 0xFF; }
     virtual void _delay_ms(uint16_t) {}
-#else // implementation from avr-bootloader-common
+#else // free function implementation from avr-bootloader-common
 #endif
 
 private:
