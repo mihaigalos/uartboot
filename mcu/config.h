@@ -24,4 +24,4 @@
 #define LED_PORT_NAME B
 #define LED_PIN 0
 
-static constexpr uint8_t kDataSize{SPM_PAGESIZE};
+static constexpr uint8_t kPageSize{SPM_PAGESIZE};
