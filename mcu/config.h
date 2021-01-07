@@ -2,12 +2,6 @@
 
 #include <stdint.h>
 
-#define LED_PORT_NAME B
-#define LED_PIN 0
-
-static constexpr uint8_t source_i2c_address_for_program =
-    0x50; // default address for CAT24M01 I2C EEPROM
-
 #ifndef TESTING
 #include <avr-bootloader-common/all.h>
 #include <util/delay.h>
@@ -26,3 +20,8 @@ static constexpr uint8_t source_i2c_address_for_program =
 #else
 #define PROGMEM
 #endif //__AVR__
+
+#define LED_PORT_NAME B
+#define LED_PIN 0
+
+static constexpr uint8_t kDataSize{SPM_PAGESIZE};

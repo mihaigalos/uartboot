@@ -12,3 +12,5 @@ static constexpr uint16_t application_length_byte_offset = 32 + metadata_base_of
 static constexpr uint16_t application_byte_offset = 34 + metadata_base_offset;
 static constexpr uint16_t application_start_address_byte_offset = 36 + metadata_base_offset;
 static constexpr uint16_t application_crc_expected_index = 28 + metadata_base_offset;
+
+static constexpr uint8_t SPM_PAGESIZE{128};
