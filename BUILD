@@ -23,12 +23,16 @@ DEFAULT_COMPILER_OPTIONS = [
 ]
 
 DEFAULT_TEST_COMPILE_OPTIONS = [
-    "-fsanitize=address",
     "-DADDRESS_SANITIZER",
     "-DTESTING",
-    "-O0",
-    "-g",
     "-fno-omit-frame-pointer",
+    "-fsanitize=address",
+    "-g",
+    "-O0",
+    "-pedantic",
+    "-std=gnu++14",
+    "-Wall",
+    "-Werror",
 ]
 
 DEFAULT_TEST_LINK_OPTIONS = [
