@@ -16,6 +16,8 @@ static constexpr uint16_t application_crc_expected_index = 28 + metadata_base_of
 static constexpr uint8_t SPM_PAGESIZE{128};
 static constexpr uint16_t kEmulatedFlashSize = 32 * 1024;
 
+static constexpr uint8_t kFlashUnprogrammedValue{0xFF};
+
 struct MemoryEmulator
 {
     uint8_t data[kEmulatedFlashSize];

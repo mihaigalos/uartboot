@@ -32,6 +32,8 @@ bool UartBoot::isCrcOk(const uint8_t (&in)[kSizeOfFlashPage + kSizeOfCRC32 + kSi
 
 void UartBoot::writeOnePageToFlash(const uint8_t (&in)[kSizeOfFlashPage + kSizeOfCRC32 + kSizeOfDestinationAddress]) const
 {
+    eraseApplication();
+
     CRC32Type expectedCRC{0};
     expectedCRC |= static_cast<CRC32Type>(in[kCRC32Offset + 0]) << 24;
     expectedCRC |= static_cast<CRC32Type>(in[kCRC32Offset + 1]) << 16;
@@ -66,7 +68,7 @@ void UartBoot::eraseApplication() const
 {
     for (auto i = 0; i < kEmulatedFlashSize; ++i)
     {
-        emulated_flash_.data[i] = 0xFF;
+        emulated_flash_.data[i] = kFlashUnprogrammedValue;
     }
 }
 
