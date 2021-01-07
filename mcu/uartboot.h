@@ -14,17 +14,13 @@ public:
     virtual bool isCrcOk(const uint8_t (&in)[kSizeOfFlashPage], const uint8_t length, const uint32_t &expectedCrc) const;
 
 #ifdef TESTING
-    virtual uint32_t readLatestApplicationTimestampFromInternalEeprom() const
-    {
-        return 0xFFFFFFFF;
-    }
-    virtual uint16_t readWordFromMetadata(uint16_t address) const
-    {
-        return 0xFFFF;
-    }
+    virtual void eraseApplication() const;
+    virtual uint32_t readLatestApplicationTimestampFromInternalEeprom() const;
+    virtual uint16_t readWordFromMetadata(uint16_t address) const;
+    virtual uint8_t uart_read();
+    virtual void _delay_ms(uint16_t);
 
-    virtual uint8_t uart_read() { return 0xFF; }
-    virtual void _delay_ms(uint16_t) {}
+    mutable FlashEmulator emulated_flash_;
 #else // free function implementation from avr-bootloader-common
 #endif
 

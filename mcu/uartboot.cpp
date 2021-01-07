@@ -29,3 +29,25 @@ bool UartBoot::isCrcOk(const uint8_t (&in)[kSizeOfFlashPage], const uint8_t leng
           &crc);
     return crc == expectedCrc;
 }
+
+#ifdef TESTING
+void UartBoot::eraseApplication() const
+{
+    for (auto i = 0; i < kEmulatedFlashSize; ++i)
+    {
+        emulated_flash_.data[i] = 0xFF;
+    }
+}
+
+uint32_t UartBoot::readLatestApplicationTimestampFromInternalEeprom() const
+{
+    return 0xFFFFFFFF;
+}
+uint16_t UartBoot::readWordFromMetadata(uint16_t address) const
+{
+    return 0xFFFF;
+}
+
+uint8_t UartBoot::uart_read() { return 0xFF; }
+void UartBoot::_delay_ms(uint16_t) {}
+#endif
