@@ -19,7 +19,6 @@ protected:
 TEST_F(Fixture, EraseApplicationOk_WhenTypical)
 {
     uint8_t expected{0xFF};
-    uint8_t actual{0x00};
 
     sut_.eraseApplication();
 
