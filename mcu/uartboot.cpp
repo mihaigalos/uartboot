@@ -55,3 +55,11 @@ const Metadata UartBoot::decodeMetadata(const uint8_t (&in)[kMetadataSize]) cons
 {
     return *reinterpret_cast<const Metadata *>(in);
 }
+
+void UartBoot::readMetadata(uint8_t (&in)[kMetadataSize]) const
+{
+    for (uint8_t i = 0; i < kMetadataSize; ++i)
+    {
+        in[i] = uart_read();
+    }
+}

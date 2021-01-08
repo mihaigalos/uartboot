@@ -42,13 +42,14 @@ public:
     virtual bool isCrcOk(const uint8_t (&in)[kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress], const uint8_t length, const CRC32Type &expectedCrc) const;
     void writeOnePageToFlash(const uint8_t (&in)[kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress]) const;
     const Metadata decodeMetadata(const uint8_t (&in)[kMetadataSize]) const;
+    void readMetadata(uint8_t (&in)[kMetadataSize]) const;
 #ifdef TESTING
     virtual void writePageBufferToFlash(const uint16_t address) const;
     virtual void writeToPageBuffer(const uint16_t address, const uint8_t *data) const;
     virtual void eraseApplication() const;
     virtual uint32_t readLatestApplicationTimestampFromInternalEeprom() const;
     virtual uint16_t readWordFromMetadata(uint16_t address) const;
-    virtual uint8_t uart_read();
+    virtual uint8_t uart_read() const;
     virtual void _delay_ms(uint16_t);
 
     mutable FlashEmulator emulated_flash_;

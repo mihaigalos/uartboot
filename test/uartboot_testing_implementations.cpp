@@ -31,6 +31,6 @@ uint16_t UartBoot::readWordFromMetadata(uint16_t address) const
     return 0xFFFF;
 }
 
-uint8_t UartBoot::uart_read() { return 0xFF; }
+uint8_t UartBoot::uart_read() const { return 0xFF; }
 void UartBoot::_delay_ms(uint16_t) {}
 #endif

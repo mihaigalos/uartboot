@@ -74,7 +74,7 @@ TEST_F(Fixture, IsDecodedMetadataOk_WhenTypical)
     expected.structure.crc32 = 0xAABBCCDD;
     expected.structure.length = 0x5678;
 
-    uint8_t data_in_big_endian_format[sizeof(Metadata)]{
+    uint8_t data_in_big_endian_format[kMetadataSize]{
         0x90, 0x78,
         'u', 'a', 'r', 't', 'b', 'o', 'o', 't',
         'm', 'y', 'a', 'p', 'p', '-', '-', '-', '-', '-',
