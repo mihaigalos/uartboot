@@ -15,6 +15,7 @@ static constexpr uint8_t kPageSize{SPM_PAGESIZE};
 static constexpr uint8_t kCRC32Offset{kPageSize};
 static constexpr uint8_t kDestinationAddressOffset{kCRC32Offset + kSizeOfCRC32};
 
+#pragma pack(push, 1)
 union Metadata {
     Metadata() {}
     struct StructureType
@@ -31,8 +32,10 @@ union Metadata {
 
     uint8_t(byte_array)[34];
 };
+#pragma pack(pop)
 
 static constexpr uint8_t kMetadataSize{sizeof(Metadata)};
+static_assert(kMetadataSize == 34, "byte_array size and kMetadataSize do not match!");
 
 class UartBoot
 {
