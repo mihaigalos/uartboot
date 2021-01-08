@@ -5,13 +5,14 @@
 #ifndef TESTING
 #include <avr-bootloader-common/all.h>
 #include <util/delay.h>
-
 #include "software_uart/software_uart.h"
+#define virtual__ virtual //needed for mocking
 
 #else // TESTING
 #include "testing_helper.h"
 #include <avr-bootloader-common/crc32.h>
-#endif // TESTING
+#define virtual__ // no need for virtual functions
+#endif            // TESTING
 
 #include <stdint.h>
 

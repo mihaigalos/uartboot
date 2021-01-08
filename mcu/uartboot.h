@@ -39,7 +39,7 @@ class UartBoot
 public:
     UartBoot();
     bool isReflashNecessary(uint32_t &application_timestamp) const;
-    virtual bool isCrcOk(const uint8_t (&in)[kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress], const uint8_t length, const CRC32Type &expectedCrc) const;
+    virtual__ bool isCrcOk(const uint8_t (&in)[kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress], const uint8_t length, const CRC32Type &expectedCrc) const;
     void writeOnePageToFlash(const uint8_t (&in)[kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress]) const;
     const Metadata decodeMetadata(const uint8_t (&in)[kMetadataSize]) const;
     void readMetadata(uint8_t (&in)[kMetadataSize]) const;
