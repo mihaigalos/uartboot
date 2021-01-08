@@ -31,7 +31,6 @@ TEST_F(Fixture, ReadUartOk_WhenTypical)
     InSequence seq;
     for (uint8_t i = 0; i < kMetadataSize; ++i)
     {
-        std::cout << "i: " << static_cast<int>(i) << std::endl;
         expected[i] = i;
         EXPECT_CALL(sut_, uart_read())
             .WillOnce(Return(i))
