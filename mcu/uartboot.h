@@ -28,31 +28,6 @@ union Metadata {
         uint32_t writing_timestamp{0};
         uint32_t crc32{0};
         uint16_t length{0};
-#ifdef TESTING
-        bool operator==(const Metadata &rhs) const
-        {
-            bool result{true};
-
-            result &= last_free_byte_pointer == rhs.structure.last_free_byte_pointer;
-
-            for (uint8_t i = 0; i < sizeof(bootloader_name); ++i)
-            {
-                result &= bootloader_name[i] == rhs.structure.bootloader_name[i];
-            }
-
-            for (uint8_t i = 0; i < sizeof(application_name); ++i)
-            {
-                result &= application_name[i] == rhs.structure.application_name[i];
-            }
-
-            result &= application_timestamp == rhs.structure.application_timestamp;
-            result &= writing_timestamp == rhs.structure.writing_timestamp;
-            result &= crc32 == rhs.structure.crc32;
-            result &= length == rhs.structure.length;
-
-            return result;
-        }
-#endif
     } structure;
 
     uint8_t(byte_array)[34];

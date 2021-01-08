@@ -23,7 +23,26 @@ protected:
 
 bool operator==(const Metadata &lhs, const Metadata &rhs)
 {
-    return lhs.structure.operator==(rhs);
+    bool result{true};
+
+    result &= lhs.structure.last_free_byte_pointer == rhs.structure.last_free_byte_pointer;
+
+    for (uint8_t i = 0; i < sizeof(lhs.structure.bootloader_name); ++i)
+    {
+        result &= lhs.structure.bootloader_name[i] == rhs.structure.bootloader_name[i];
+    }
+
+    for (uint8_t i = 0; i < sizeof(lhs.structure.application_name); ++i)
+    {
+        result &= lhs.structure.application_name[i] == rhs.structure.application_name[i];
+    }
+
+    result &= lhs.structure.application_timestamp == rhs.structure.application_timestamp;
+    result &= lhs.structure.writing_timestamp == rhs.structure.writing_timestamp;
+    result &= lhs.structure.crc32 == rhs.structure.crc32;
+    result &= lhs.structure.length == rhs.structure.length;
+
+    return result;
 }
 
 TEST_F(Fixture, IsDecodedMetadataOk_WhenTypical)
