@@ -22,7 +22,7 @@ bool UartBoot::isReflashNecessary(uint32_t &application_timestamp) const
     return false;
 }
 
-bool UartBoot::isCrcOk(const uint8_t (&in)[kSizeOfFlashPage + kSizeOfCRC32 + kSizeOfDestinationAddress], const uint8_t length, const CRC32Type &expectedCrc) const
+bool UartBoot::isCrcOk(const uint8_t (&in)[kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress], const uint8_t length, const CRC32Type &expectedCrc) const
 {
     uint32_t crc{0};
     crc32(reinterpret_cast<const void *>(&in[0]), length, &crc_table_[0],
@@ -30,7 +30,7 @@ bool UartBoot::isCrcOk(const uint8_t (&in)[kSizeOfFlashPage + kSizeOfCRC32 + kSi
     return crc == expectedCrc;
 }
 
-void UartBoot::writeOnePageToFlash(const uint8_t (&in)[kSizeOfFlashPage + kSizeOfCRC32 + kSizeOfDestinationAddress]) const
+void UartBoot::writeOnePageToFlash(const uint8_t (&in)[kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress]) const
 {
     eraseApplication();
 
@@ -44,7 +44,7 @@ void UartBoot::writeOnePageToFlash(const uint8_t (&in)[kSizeOfFlashPage + kSizeO
     destinationAddress |= static_cast<DestinationAddreessType>(in[kDestinationAddressOffset + 0]) << 8;
     destinationAddress |= static_cast<DestinationAddreessType>(in[kDestinationAddressOffset + 1]);
 
-    if (isCrcOk(in, kSizeOfFlashPage, expectedCRC))
+    if (isCrcOk(in, kPageSize, expectedCRC))
     {
         writeToPageBuffer(destinationAddress, in);
         writePageBufferToFlash(destinationAddress);
@@ -64,7 +64,7 @@ void UartBoot::writePageBufferToFlash(const uint16_t address) const
 }
 void UartBoot::writeToPageBuffer(const uint16_t address, const uint8_t *data) const
 {
-    for (uint8_t i = 0; i < kSizeOfFlashPage; ++i)
+    for (uint8_t i = 0; i < kPageSize; ++i)
     {
         emulated_flash_.data[address + i] = *data++;
     }

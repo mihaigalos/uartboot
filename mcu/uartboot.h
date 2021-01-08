@@ -4,7 +4,6 @@
 
 constexpr uint8_t kStartOfHeading PROGMEM{0x01};
 constexpr uint8_t kWaitForDataStartBootloader PROGMEM{5};
-constexpr uint8_t kSizeOfFlashPage PROGMEM{128};
 
 using CRC32Type = uint32_t;
 using DestinationAddreessType = uint16_t;
@@ -40,8 +39,8 @@ class UartBoot
 public:
     UartBoot();
     bool isReflashNecessary(uint32_t &application_timestamp) const;
-    virtual bool isCrcOk(const uint8_t (&in)[kSizeOfFlashPage + kSizeOfCRC32 + kSizeOfDestinationAddress], const uint8_t length, const CRC32Type &expectedCrc) const;
-    void writeOnePageToFlash(const uint8_t (&in)[kSizeOfFlashPage + kSizeOfCRC32 + kSizeOfDestinationAddress]) const;
+    virtual bool isCrcOk(const uint8_t (&in)[kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress], const uint8_t length, const CRC32Type &expectedCrc) const;
+    void writeOnePageToFlash(const uint8_t (&in)[kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress]) const;
     const Metadata decodeMetadata(const uint8_t (&in)[kMetadataSize]) const;
 #ifdef TESTING
     virtual void writePageBufferToFlash(const uint16_t address) const;
