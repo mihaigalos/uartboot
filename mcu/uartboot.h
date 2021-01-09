@@ -19,7 +19,7 @@ static constexpr uint16_t kFlashSize{32 * 1024};
 static constexpr uint16_t kNumberOfFlashPages{kFlashSize / kPageSize};
 static constexpr uint8_t kInvalidValue{0xFF};
 
-static constexpr uint8_t kPageWithMetadataSize{kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress};
+static constexpr uint8_t kPageWithCrcAndDestinationSize{kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress};
 
 #ifdef TESTING
 struct MemoryEmulator
@@ -32,8 +32,8 @@ using EEPROMEmulator = MemoryEmulator;
 #endif // TESTING
 
 #pragma pack(push, 1)
-union GlobalMetadata {
-    GlobalMetadata() {}
+union Metadata {
+    Metadata() {}
     struct StructureType
     {
         StructureType() {}
@@ -50,8 +50,8 @@ union GlobalMetadata {
 };
 #pragma pack(pop)
 
-static constexpr uint8_t kGlobalMetadataSize{sizeof(GlobalMetadata)};
-static_assert(kGlobalMetadataSize == sizeof(GlobalMetadata::byte_array), "kGlobalMetadataSize and byte_array size do not match!");
+static constexpr uint8_t kMetadataSize{sizeof(Metadata)};
+static_assert(kMetadataSize == sizeof(Metadata::byte_array), "kMetadataSize and byte_array size do not match!");
 
 class UartBoot
 {
@@ -59,17 +59,17 @@ public:
     UartBoot();
     void main();
     bool isReflashNecessary(uint32_t &application_timestamp) const;
-    virtual__ bool isCrcOk(const uint8_t (&in)[kPageWithMetadataSize], const uint8_t length, const CRC32Type &expectedCrc) const;
-    void writeOnePageToFlash(const uint8_t (&in)[kPageWithMetadataSize]) const;
-    const GlobalMetadata decodeGlobalMetadata(const uint8_t (&in)[kGlobalMetadataSize]) const;
-    void readGlobalMetadata(uint8_t (&in)[kGlobalMetadataSize]) const;
-    const uint8_t readPageWithMetadataFromHost(uint8_t (&in)[kPageWithMetadataSize]) const;
+    virtual__ bool isCrcOk(const uint8_t (&in)[kPageWithCrcAndDestinationSize], const uint8_t length, const CRC32Type &expectedCrc) const;
+    void writeOnePageToFlash(const uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;
+    const Metadata decodeMetadata(const uint8_t (&in)[kMetadataSize]) const;
+    void readMetadata(uint8_t (&in)[kMetadataSize]) const;
+    const uint8_t readPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;
 #ifdef TESTING
     virtual void writePageBufferToFlash(const uint16_t address) const;
     virtual void writeToPageBuffer(const uint16_t address, const uint8_t *data) const;
     virtual void eraseApplication() const;
     virtual uint32_t readLatestApplicationTimestampFromInternalEeprom() const;
-    virtual uint16_t readWordFromGlobalMetadata(uint16_t address) const;
+    virtual uint16_t readWordFromMetadata(uint16_t address) const;
     virtual uint8_t uart_read() const;
     virtual void _delay_ms(uint16_t);
 

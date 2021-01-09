@@ -11,9 +11,9 @@ bool UartBoot::isReflashNecessary(uint32_t &application_timestamp) const
         readLatestApplicationTimestampFromInternalEeprom();
 
     application_timestamp =
-        static_cast<uint32_t>(readWordFromGlobalMetadata(timestamp_application_byte_offset))
+        static_cast<uint32_t>(readWordFromMetadata(timestamp_application_byte_offset))
         << 16;
-    application_timestamp |= static_cast<uint32_t>(readWordFromGlobalMetadata(timestamp_application_byte_offset + 2));
+    application_timestamp |= static_cast<uint32_t>(readWordFromMetadata(timestamp_application_byte_offset + 2));
 
     if (eeprom_not_programmed == current_application_timestamp)
         return true;
@@ -22,7 +22,7 @@ bool UartBoot::isReflashNecessary(uint32_t &application_timestamp) const
     return false;
 }
 
-bool UartBoot::isCrcOk(const uint8_t (&in)[kPageWithMetadataSize], const uint8_t length, const CRC32Type &expectedCrc) const
+bool UartBoot::isCrcOk(const uint8_t (&in)[kPageWithCrcAndDestinationSize], const uint8_t length, const CRC32Type &expectedCrc) const
 {
     uint32_t crc{0};
     crc32(reinterpret_cast<const void *>(&in[0]), length, &crc_table_[0],
@@ -30,7 +30,7 @@ bool UartBoot::isCrcOk(const uint8_t (&in)[kPageWithMetadataSize], const uint8_t
     return crc == expectedCrc;
 }
 
-void UartBoot::writeOnePageToFlash(const uint8_t (&in)[kPageWithMetadataSize]) const
+void UartBoot::writeOnePageToFlash(const uint8_t (&in)[kPageWithCrcAndDestinationSize]) const
 {
     eraseApplication();
 
@@ -51,24 +51,24 @@ void UartBoot::writeOnePageToFlash(const uint8_t (&in)[kPageWithMetadataSize]) c
     }
 }
 
-const GlobalMetadata UartBoot::decodeGlobalMetadata(const uint8_t (&in)[kGlobalMetadataSize]) const
+const Metadata UartBoot::decodeMetadata(const uint8_t (&in)[kMetadataSize]) const
 {
-    return *reinterpret_cast<const GlobalMetadata *>(in);
+    return *reinterpret_cast<const Metadata *>(in);
 }
 
-void UartBoot::readGlobalMetadata(uint8_t (&in)[kGlobalMetadataSize]) const
+void UartBoot::readMetadata(uint8_t (&in)[kMetadataSize]) const
 {
-    for (uint8_t i = 0; i < kGlobalMetadataSize; ++i)
+    for (uint8_t i = 0; i < kMetadataSize; ++i)
     {
         in[i] = uart_read();
     }
 }
 
-const uint8_t UartBoot::readPageWithMetadataFromHost(uint8_t (&in)[kPageWithMetadataSize]) const
+const uint8_t UartBoot::readPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const
 {
     uint8_t readBytes{0};
 
-    for (; readBytes < kPageWithMetadataSize; ++readBytes)
+    for (; readBytes < kPageWithCrcAndDestinationSize; ++readBytes)
     {
         in[readBytes] = uart_read();
     }
