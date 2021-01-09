@@ -11,9 +11,9 @@ bool UartBoot::isReflashNecessary(uint32_t &application_timestamp) const
         readLatestApplicationTimestampFromInternalEeprom();
 
     application_timestamp =
-        static_cast<uint32_t>(readWordFromMetadata(timestamp_application_byte_offset))
+        static_cast<uint32_t>(readWordFromGlobalMetadata(timestamp_application_byte_offset))
         << 16;
-    application_timestamp |= static_cast<uint32_t>(readWordFromMetadata(timestamp_application_byte_offset + 2));
+    application_timestamp |= static_cast<uint32_t>(readWordFromGlobalMetadata(timestamp_application_byte_offset + 2));
 
     if (eeprom_not_programmed == current_application_timestamp)
         return true;
@@ -51,14 +51,14 @@ void UartBoot::writeOnePageToFlash(const uint8_t (&in)[kPageSize + kSizeOfCRC32 
     }
 }
 
-const Metadata UartBoot::decodeMetadata(const uint8_t (&in)[kMetadataSize]) const
+const GlobalMetadata UartBoot::decodeGlobalMetadata(const uint8_t (&in)[kGlobalGlobalMetadataSize]) const
 {
-    return *reinterpret_cast<const Metadata *>(in);
+    return *reinterpret_cast<const GlobalMetadata *>(in);
 }
 
-void UartBoot::readMetadata(uint8_t (&in)[kMetadataSize]) const
+void UartBoot::readGlobalMetadata(uint8_t (&in)[kGlobalGlobalMetadataSize]) const
 {
-    for (uint8_t i = 0; i < kMetadataSize; ++i)
+    for (uint8_t i = 0; i < kGlobalGlobalMetadataSize; ++i)
     {
         in[i] = uart_read();
     }

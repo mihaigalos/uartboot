@@ -14,7 +14,7 @@ class UartBootMock : public UartBoot
 {
 public:
     MOCK_METHOD(uint32_t, readLatestApplicationTimestampFromInternalEeprom, (), (const, override));
-    MOCK_METHOD(uint16_t, readWordFromMetadata, (uint16_t), (const, override));
+    MOCK_METHOD(uint16_t, readWordFromGlobalMetadata, (uint16_t), (const, override));
 };
 
 class Fixture : public ::testing::Test
@@ -29,7 +29,7 @@ TEST_F(Fixture, IsReflashNecessaryWorks_WhenTypical)
     bool actual{false};
     uint32_t current_timestamp{0};
     EXPECT_CALL(sut_, readLatestApplicationTimestampFromInternalEeprom()).WillOnce(Return(0xFFFFFFFF));
-    EXPECT_CALL(sut_, readWordFromMetadata(_)).WillOnce(Return(0x1234)).WillRepeatedly(Return(0x5678));
+    EXPECT_CALL(sut_, readWordFromGlobalMetadata(_)).WillOnce(Return(0x1234)).WillRepeatedly(Return(0x5678));
 
     actual = sut_.isReflashNecessary(current_timestamp);
 
@@ -42,7 +42,7 @@ TEST_F(Fixture, IsReflashNecessaryNotPerformed_WhenTypical)
     bool actual{false};
     uint32_t current_timestamp{0};
     EXPECT_CALL(sut_, readLatestApplicationTimestampFromInternalEeprom()).WillOnce(Return(0x12345678));
-    EXPECT_CALL(sut_, readWordFromMetadata(_)).WillOnce(Return(0x1234)).WillRepeatedly(Return(0x5678));
+    EXPECT_CALL(sut_, readWordFromGlobalMetadata(_)).WillOnce(Return(0x1234)).WillRepeatedly(Return(0x5678));
 
     actual = sut_.isReflashNecessary(current_timestamp);
 

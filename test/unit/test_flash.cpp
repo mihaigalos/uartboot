@@ -22,7 +22,7 @@ TEST_F(Fixture, EraseApplicationOk_WhenTypical)
 
     sut_.eraseApplication();
 
-    for (auto i = 0; i < kEmulatedFlashSize; ++i)
+    for (auto i = 0; i < kFlashSize; ++i)
     {
         uint8_t actual = sut_.emulated_flash_.data[i];
         ASSERT_EQ(actual, expected);

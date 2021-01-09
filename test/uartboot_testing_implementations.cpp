@@ -16,7 +16,7 @@ void UartBoot::writeToPageBuffer(const uint16_t address, const uint8_t *data) co
 
 void UartBoot::eraseApplication() const
 {
-    for (auto i = 0; i < kEmulatedFlashSize; ++i)
+    for (auto i = 0; i < kFlashSize; ++i)
     {
         emulated_flash_.data[i] = kFlashUnprogrammedValue;
     }
@@ -26,7 +26,7 @@ uint32_t UartBoot::readLatestApplicationTimestampFromInternalEeprom() const
 {
     return 0xFFFFFFFF;
 }
-uint16_t UartBoot::readWordFromMetadata(uint16_t address) const
+uint16_t UartBoot::readWordFromGlobalMetadata(uint16_t address) const
 {
     return 0xFFFF;
 }

@@ -25,11 +25,11 @@ protected:
 
 TEST_F(Fixture, ReadUartOk_WhenTypical)
 {
-    uint8_t expected[kMetadataSize];
-    uint8_t actual[kMetadataSize];
+    uint8_t expected[kGlobalGlobalMetadataSize];
+    uint8_t actual[kGlobalGlobalMetadataSize];
 
     InSequence seq;
-    for (uint8_t i = 0; i < kMetadataSize; ++i)
+    for (uint8_t i = 0; i < kGlobalGlobalMetadataSize; ++i)
     {
         expected[i] = i;
         EXPECT_CALL(sut_, uart_read())
@@ -37,9 +37,9 @@ TEST_F(Fixture, ReadUartOk_WhenTypical)
             .RetiresOnSaturation();
     }
 
-    sut_.readMetadata(actual);
+    sut_.readGlobalMetadata(actual);
 
-    for (uint8_t i = 0; i < kMetadataSize; ++i)
+    for (uint8_t i = 0; i < kGlobalGlobalMetadataSize; ++i)
     {
         ASSERT_EQ(actual[i], expected[i]);
     }

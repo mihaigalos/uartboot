@@ -15,9 +15,22 @@ static constexpr uint8_t kPageSize{SPM_PAGESIZE};
 static constexpr uint8_t kCRC32Offset{kPageSize};
 static constexpr uint8_t kDestinationAddressOffset{kCRC32Offset + kSizeOfCRC32};
 
+static constexpr uint16_t kFlashSize{32 * 1024};
+static constexpr uint16_t kNumberOfFlashPages{kFlashSize / kPageSize};
+
+#ifdef TESTING
+struct MemoryEmulator
+{
+    uint8_t data[kFlashSize];
+};
+
+using FlashEmulator = MemoryEmulator;
+using EEPROMEmulator = MemoryEmulator;
+#endif // TESTING
+
 #pragma pack(push, 1)
-union Metadata {
-    Metadata() {}
+union GlobalMetadata {
+    GlobalMetadata() {}
     struct StructureType
     {
         StructureType() {}
@@ -34,8 +47,8 @@ union Metadata {
 };
 #pragma pack(pop)
 
-static constexpr uint8_t kMetadataSize{sizeof(Metadata)};
-static_assert(kMetadataSize == sizeof(Metadata::byte_array), "kMetadataSize and byte_array size do not match!");
+static constexpr uint8_t kGlobalGlobalMetadataSize{sizeof(GlobalMetadata)};
+static_assert(kGlobalGlobalMetadataSize == sizeof(GlobalMetadata::byte_array), "kGlobalGlobalMetadataSize and byte_array size do not match!");
 
 class UartBoot
 {
@@ -45,14 +58,14 @@ public:
     bool isReflashNecessary(uint32_t &application_timestamp) const;
     virtual__ bool isCrcOk(const uint8_t (&in)[kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress], const uint8_t length, const CRC32Type &expectedCrc) const;
     void writeOnePageToFlash(const uint8_t (&in)[kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress]) const;
-    const Metadata decodeMetadata(const uint8_t (&in)[kMetadataSize]) const;
-    void readMetadata(uint8_t (&in)[kMetadataSize]) const;
+    const GlobalMetadata decodeGlobalMetadata(const uint8_t (&in)[kGlobalGlobalMetadataSize]) const;
+    void readGlobalMetadata(uint8_t (&in)[kGlobalGlobalMetadataSize]) const;
 #ifdef TESTING
     virtual void writePageBufferToFlash(const uint16_t address) const;
     virtual void writeToPageBuffer(const uint16_t address, const uint8_t *data) const;
     virtual void eraseApplication() const;
     virtual uint32_t readLatestApplicationTimestampFromInternalEeprom() const;
-    virtual uint16_t readWordFromMetadata(uint16_t address) const;
+    virtual uint16_t readWordFromGlobalMetadata(uint16_t address) const;
     virtual uint8_t uart_read() const;
     virtual void _delay_ms(uint16_t);
 

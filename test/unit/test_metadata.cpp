@@ -21,7 +21,7 @@ protected:
     UartBootMock sut_{};
 };
 
-bool operator==(const Metadata &lhs, const Metadata &rhs)
+bool operator==(const GlobalMetadata &lhs, const GlobalMetadata &rhs)
 {
     bool result{true};
 
@@ -45,9 +45,9 @@ bool operator==(const Metadata &lhs, const Metadata &rhs)
     return result;
 }
 
-TEST_F(Fixture, IsDecodedMetadataOk_WhenTypical)
+TEST_F(Fixture, IsDecodedGlobalMetadataOk_WhenTypical)
 {
-    Metadata expected;
+    GlobalMetadata expected;
     expected.structure.last_free_byte_pointer = 0x7890;
     expected.structure.bootloader_name[0] = 'u';
     expected.structure.bootloader_name[1] = 'a';
@@ -74,7 +74,7 @@ TEST_F(Fixture, IsDecodedMetadataOk_WhenTypical)
     expected.structure.crc32 = 0xAABBCCDD;
     expected.structure.length = 0x5678;
 
-    uint8_t data_in_big_endian_format[kMetadataSize]{
+    uint8_t data_in_big_endian_format[kGlobalGlobalMetadataSize]{
         0x90, 0x78,
         'u', 'a', 'r', 't', 'b', 'o', 'o', 't',
         'm', 'y', 'a', 'p', 'p', '-', '-', '-', '-', '-',
@@ -83,7 +83,7 @@ TEST_F(Fixture, IsDecodedMetadataOk_WhenTypical)
         0xDD, 0xCC, 0xBB, 0xAA,
         0x78, 0x56};
 
-    auto actual = sut_.decodeMetadata(data_in_big_endian_format);
+    auto actual = sut_.decodeGlobalMetadata(data_in_big_endian_format);
 
     ASSERT_EQ(actual, expected);
 }
