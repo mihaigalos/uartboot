@@ -35,12 +35,13 @@ union Metadata {
 #pragma pack(pop)
 
 static constexpr uint8_t kMetadataSize{sizeof(Metadata)};
-static_assert(kMetadataSize == 34, "byte_array size and kMetadataSize do not match!");
+static_assert(kMetadataSize == sizeof(Metadata::byte_array), "kMetadataSize and byte_array size do not match!");
 
 class UartBoot
 {
 public:
     UartBoot();
+    void main();
     bool isReflashNecessary(uint32_t &application_timestamp) const;
     virtual__ bool isCrcOk(const uint8_t (&in)[kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress], const uint8_t length, const CRC32Type &expectedCrc) const;
     void writeOnePageToFlash(const uint8_t (&in)[kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress]) const;
