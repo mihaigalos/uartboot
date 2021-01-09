@@ -22,7 +22,7 @@ bool UartBoot::isReflashNecessary(uint32_t &application_timestamp) const
     return false;
 }
 
-bool UartBoot::isCrcOk(const uint8_t (&in)[kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress], const uint8_t length, const CRC32Type &expectedCrc) const
+bool UartBoot::isCrcOk(const uint8_t (&in)[kPageWithMetadataSize], const uint8_t length, const CRC32Type &expectedCrc) const
 {
     uint32_t crc{0};
     crc32(reinterpret_cast<const void *>(&in[0]), length, &crc_table_[0],
@@ -30,7 +30,7 @@ bool UartBoot::isCrcOk(const uint8_t (&in)[kPageSize + kSizeOfCRC32 + kSizeOfDes
     return crc == expectedCrc;
 }
 
-void UartBoot::writeOnePageToFlash(const uint8_t (&in)[kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress]) const
+void UartBoot::writeOnePageToFlash(const uint8_t (&in)[kPageWithMetadataSize]) const
 {
     eraseApplication();
 
@@ -51,15 +51,37 @@ void UartBoot::writeOnePageToFlash(const uint8_t (&in)[kPageSize + kSizeOfCRC32 
     }
 }
 
-const GlobalMetadata UartBoot::decodeGlobalMetadata(const uint8_t (&in)[kGlobalGlobalMetadataSize]) const
+const GlobalMetadata UartBoot::decodeGlobalMetadata(const uint8_t (&in)[kGlobalMetadataSize]) const
 {
     return *reinterpret_cast<const GlobalMetadata *>(in);
 }
 
-void UartBoot::readGlobalMetadata(uint8_t (&in)[kGlobalGlobalMetadataSize]) const
+void UartBoot::readGlobalMetadata(uint8_t (&in)[kGlobalMetadataSize]) const
 {
-    for (uint8_t i = 0; i < kGlobalGlobalMetadataSize; ++i)
+    for (uint8_t i = 0; i < kGlobalMetadataSize; ++i)
     {
         in[i] = uart_read();
     }
+}
+
+const uint8_t UartBoot::readPageWithMetadataFromHost(uint8_t (&in)[kPageWithMetadataSize]) const
+{
+    uint8_t readBytes{0};
+
+    for (; readBytes < kPageWithMetadataSize; ++readBytes)
+    {
+        in[readBytes] = uart_read();
+    }
+
+    CRC32Type expectedCrc = static_cast<CRC32Type>(in[kCRC32Offset + 0]) << 24;
+    expectedCrc |= static_cast<CRC32Type>(in[kCRC32Offset + 1]) << 16;
+    expectedCrc |= static_cast<CRC32Type>(in[kCRC32Offset + 2]) << 8;
+    expectedCrc |= static_cast<CRC32Type>(in[kCRC32Offset + 3]);
+
+    if (!isCrcOk(in, kPageSize, expectedCrc))
+    {
+        readBytes = kInvalidValue;
+    }
+
+    return readBytes;
 }

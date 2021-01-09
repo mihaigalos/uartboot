@@ -152,6 +152,33 @@ cc_binary(
     ]
 ]
 
+[
+    cc_test(
+        name = "integration/" + integration_name,
+        srcs = glob([
+            "mcu/uartboot.cpp",
+            "mcu/uartboot.h",
+            "mcu/config.h",
+            "mcu/testing_helper.h",
+            "test/uartboot_testing_implementations.cpp",
+            "test/integration/" + integration_name + ".cpp",
+        ]),
+        copts = DEFAULT_TEST_COMPILE_OPTIONS,
+        includes = [
+            "mcu",
+        ],
+        linkopts = DEFAULT_TEST_LINK_OPTIONS,
+        tags = ["integration"],
+        deps = DEFAULT_TEST_DEPS+[
+             "@avr-bootloader-common",
+        ],
+    )
+    for integration_name in [
+        file_name.replace("test/integration/", "").replace(".cpp", "")
+        for file_name in glob(["test/integration/**/*.cpp"])
+    ]
+]
+
 hex(
     name = "uartboot_hex",
     src = ":uartboot.elf",
