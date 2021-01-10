@@ -83,18 +83,15 @@ const TECommunicationResult UartBoot::readPageWithMetadataFromHost(uint8_t (&in)
     return TECommunicationResult::Ok;
 }
 
-// TECommunicationResult UartBoot::safeReadPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const
-// {
-//     TECommunicationResult result{TECommunicationResult::Invalid};
+TECommunicationResult UartBoot::safeReadPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const
+{
+    TECommunicationResult result{TECommunicationResult::Invalid};
 
-//     for (uint8_t tries = 0; tries < kRetriesOnCommunicationFailure, result != TECommunicationResult::Ok; ++tries)
-//     {
-//         if (kInvalidValue != readPageWithMetadataFromHost(in))
-//         {
-//             result = TECommunicationResult::Ok;
-//             uart_write(Te)
-//         }
-//     }
+    for (uint8_t tries = 0; tries < kRetriesOnCommunicationFailure && result != TECommunicationResult::Ok; ++tries)
+    {
+        result = readPageWithMetadataFromHost(in);
+        uart_write(static_cast<uint8_t>(result));
+    }
 
-//     return result;
-// }
+    return result;
+}

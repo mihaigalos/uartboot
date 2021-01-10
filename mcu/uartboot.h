@@ -77,6 +77,7 @@ public:
     virtual uint32_t readLatestApplicationTimestampFromInternalEeprom() const;
     virtual uint16_t readWordFromMetadata(uint16_t address) const;
     virtual uint8_t uart_read() const;
+    virtual void uart_write(uint8_t value) const;
     virtual void _delay_ms(uint16_t);
 
     mutable FlashEmulator emulated_flash_;
