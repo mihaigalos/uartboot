@@ -44,7 +44,7 @@ union Metadata {
         uint16_t length{0};
     } structure;
 
-    uint8_t(byte_array)[34];
+    uint8_t(byte_array)[sizeof(StructureType)];
 };
 #pragma pack(pop)
 
