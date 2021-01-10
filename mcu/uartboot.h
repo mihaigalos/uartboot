@@ -69,7 +69,7 @@ public:
     const Metadata decodeMetadata(const uint8_t (&in)[kMetadataSize]) const;
     void readMetadata(uint8_t (&in)[kMetadataSize]) const;
     const TECommunicationResult readPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;
-    TECommunicationResult safeReadPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;
+    const TECommunicationResult safeReadPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;
 #ifdef TESTING
     virtual void writePageBufferToFlash(const uint16_t address) const;
     virtual void writeToPageBuffer(const uint16_t address, const uint8_t *data) const;

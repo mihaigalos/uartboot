@@ -83,7 +83,7 @@ const TECommunicationResult UartBoot::readPageWithMetadataFromHost(uint8_t (&in)
     return TECommunicationResult::Ok;
 }
 
-TECommunicationResult UartBoot::safeReadPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const
+const TECommunicationResult UartBoot::safeReadPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const
 {
     TECommunicationResult result{TECommunicationResult::Invalid};
 
