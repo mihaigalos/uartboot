@@ -65,7 +65,7 @@ public:
     void main();
     bool isReflashNecessary(uint32_t &application_timestamp) const;
     virtual__ bool isCrcOk(const uint8_t (&in)[kPageWithCrcAndDestinationSize], const uint8_t length, const CRC32Type &expectedCrc) const;
-    void writeOnePageToFlash(const uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;
+    void writePageToFlash(const uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;
     const Metadata decodeMetadata(const uint8_t (&in)[kMetadataSize]) const;
     void readMetadata(uint8_t (&in)[kMetadataSize]) const;
     const TECommunicationResult readPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;

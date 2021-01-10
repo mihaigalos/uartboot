@@ -30,7 +30,7 @@ bool UartBoot::isCrcOk(const uint8_t (&in)[kPageWithCrcAndDestinationSize], cons
     return crc == expectedCrc;
 }
 
-void UartBoot::writeOnePageToFlash(const uint8_t (&in)[kPageWithCrcAndDestinationSize]) const
+void UartBoot::writePageToFlash(const uint8_t (&in)[kPageWithCrcAndDestinationSize]) const
 {
     eraseApplication();
 

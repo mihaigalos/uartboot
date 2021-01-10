@@ -49,7 +49,7 @@ TEST_F(Fixture, WriteOnePageOk_WhenTypical)
     data[kDestinationAddressOffset + 0] = 0x10;
     data[kDestinationAddressOffset + 1] = 0x00;
 
-    sut_.writeOnePageToFlash(data);
+    sut_.writePageToFlash(data);
 
     uint16_t destinationAddress{
         static_cast<uint16_t>(static_cast<uint16_t>(data[kDestinationAddressOffset + 0]) << 8 |

@@ -67,15 +67,15 @@ uint8_t Fixture::data_[kPageWithCrcAndDestinationSize]{0x7e, 0x8a, 0x8b, 0xeb, 0
 TECommunicationResult Fixture::transmit_to_host_buffer_[8];
 uint8_t Fixture::pos_{0};
 
-TEST_F(Fixture, ReadPageFromHostCrcMismatch_WhenTypical)
+TEST_F(Fixture, SafeReadPageFromHostCrcMismatch_WhenTypical)
 {
     TECommunicationResult expected{TECommunicationResult::Ok};
     TECommunicationResult actual{TECommunicationResult::Invalid};
     uint8_t in[kPageWithCrcAndDestinationSize];
     EXPECT_CALL(sut_, uart_read())
         .WillRepeatedly(Invoke(onUartRead));
-    ON_CALL(sut_, uart_write(_))
-        .WillByDefault(Invoke([&](uint8_t param) { Fixture::onUartWrite(param); }));
+    EXPECT_CALL(sut_, uart_write(_))
+        .WillRepeatedly(Invoke([&](uint8_t param) { Fixture::onUartWrite(param); }));
 
     sut_.safeReadPageWithMetadataFromHost(in);
 
