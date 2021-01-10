@@ -2,9 +2,6 @@
 
 #include "config.h"
 
-static constexpr uint8_t kStartOfHeading PROGMEM{0x01};
-static constexpr uint8_t kWaitForDataStartBootloader PROGMEM{5};
-
 using CRC32Type = uint32_t;
 using DestinationAddreessType = uint16_t;
 
@@ -20,6 +17,7 @@ static constexpr uint16_t kNumberOfFlashPages{kFlashSize / kPageSize};
 static constexpr uint8_t kInvalidValue{0xFF};
 
 static constexpr uint8_t kPageWithCrcAndDestinationSize{kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress};
+static constexpr uint8_t kRetriesOnCommunicationFailure{3};
 
 #ifdef TESTING
 struct MemoryEmulator
@@ -53,6 +51,13 @@ union Metadata {
 static constexpr uint8_t kMetadataSize{sizeof(Metadata)};
 static_assert(kMetadataSize == sizeof(Metadata::byte_array), "kMetadataSize and byte_array size do not match!");
 
+enum class TECommunicationResult
+{
+    Invalid,
+    Ok,
+    CRCMismatch,
+};
+
 class UartBoot
 {
 public:
@@ -63,7 +68,8 @@ public:
     void writeOnePageToFlash(const uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;
     const Metadata decodeMetadata(const uint8_t (&in)[kMetadataSize]) const;
     void readMetadata(uint8_t (&in)[kMetadataSize]) const;
-    const uint8_t readPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;
+    const TECommunicationResult readPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;
+    TECommunicationResult safeReadPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;
 #ifdef TESTING
     virtual void writePageBufferToFlash(const uint16_t address) const;
     virtual void writeToPageBuffer(const uint16_t address, const uint8_t *data) const;

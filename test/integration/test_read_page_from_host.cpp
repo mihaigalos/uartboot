@@ -52,8 +52,8 @@ uint8_t Fixture::data_[kPageWithCrcAndDestinationSize]{0x7e, 0x8a, 0x8b, 0xeb, 0
 
 TEST_F(Fixture, ReadPageFromHostOk_WhenTypical)
 {
-    uint8_t expected{kPageWithCrcAndDestinationSize};
-    uint8_t actual{0};
+    TECommunicationResult expected{TECommunicationResult::Ok};
+    TECommunicationResult actual{TECommunicationResult::Invalid};
     uint8_t in[kPageWithCrcAndDestinationSize];
 
     InSequence seq;

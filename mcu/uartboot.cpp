@@ -61,7 +61,7 @@ void UartBoot::readMetadata(uint8_t (&in)[kMetadataSize]) const
     }
 }
 
-const uint8_t UartBoot::readPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const
+const TECommunicationResult UartBoot::readPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const
 {
     uint8_t readBytes{0};
 
@@ -77,8 +77,24 @@ const uint8_t UartBoot::readPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcA
 
     if (!isCrcOk(in, kPageSize, expectedCrc))
     {
-        readBytes = kInvalidValue;
+        return TECommunicationResult::CRCMismatch;
     }
 
-    return readBytes;
+    return TECommunicationResult::Ok;
 }
+
+// TECommunicationResult UartBoot::safeReadPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const
+// {
+//     TECommunicationResult result{TECommunicationResult::Invalid};
+
+//     for (uint8_t tries = 0; tries < kRetriesOnCommunicationFailure, result != TECommunicationResult::Ok; ++tries)
+//     {
+//         if (kInvalidValue != readPageWithMetadataFromHost(in))
+//         {
+//             result = TECommunicationResult::Ok;
+//             uart_write(Te)
+//         }
+//     }
+
+//     return result;
+// }
