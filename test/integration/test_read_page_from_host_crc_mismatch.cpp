@@ -22,10 +22,10 @@ class Fixture : public ::testing::Test
 public:
     void SetUp() override
     {
-        data_[kCRC32Offset + 0] = 0x7D;
-        data_[kCRC32Offset + 1] = 0xD1;
-        data_[kCRC32Offset + 2] = 0x2D;
-        data_[kCRC32Offset + 3] = 0x2F;
+        data_[kCRC32Offset + 0] = 0xAA;
+        data_[kCRC32Offset + 1] = 0x55;
+        data_[kCRC32Offset + 2] = 0xAA;
+        data_[kCRC32Offset + 3] = 0x55;
 
         data_[kDestinationAddressOffset + 0] = 0x00;
         data_[kDestinationAddressOffset + 1] = 0x00;
@@ -50,9 +50,9 @@ uint8_t Fixture::data_[kPageWithCrcAndDestinationSize]{0x7e, 0x8a, 0x8b, 0xeb, 0
                                                        0x45, 0x80, 0x10, 0xf0, 0xc0, 0xe9, 0x31, 0x76, 0x4c, 0xdc, 0x56, 0x6b, 0xdd, 0x43, 0x0b, 0x35,
                                                        0xcb, 0x38, 0xaa, 0x28, 0x62, 0x85, 0x57, 0xbd, 0x7b, 0x82, 0x1e, 0xba, 0xfa, 0x21, 0xb0, 0xd6};
 
-TEST_F(Fixture, ReadPageFromHostOk_WhenTypical)
+TEST_F(Fixture, ReadPageFromHostNotOk_WhenCrcMismatch)
 {
-    uint8_t expected{kPageWithCrcAndDestinationSize};
+    uint8_t expected{kInvalidValue};
     uint8_t actual{0};
     uint8_t in[kPageWithCrcAndDestinationSize];
 

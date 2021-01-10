@@ -44,11 +44,8 @@ void UartBoot::writeOnePageToFlash(const uint8_t (&in)[kPageWithCrcAndDestinatio
     destinationAddress |= static_cast<DestinationAddreessType>(in[kDestinationAddressOffset + 0]) << 8;
     destinationAddress |= static_cast<DestinationAddreessType>(in[kDestinationAddressOffset + 1]);
 
-    if (isCrcOk(in, kPageSize, expectedCRC))
-    {
-        writeToPageBuffer(destinationAddress, in);
-        writePageBufferToFlash(destinationAddress);
-    }
+    writeToPageBuffer(destinationAddress, in);
+    writePageBufferToFlash(destinationAddress);
 }
 
 const Metadata UartBoot::decodeMetadata(const uint8_t (&in)[kMetadataSize]) const
