@@ -57,7 +57,7 @@ TEST_F(Fixture, ReadPageFromHostNotOk_WhenCrcMismatch)
     uint8_t in[kPageWithCrcAndDestinationSize];
 
     InSequence seq;
-    for (uint8_t i = 0; i < kMetadataSize; ++i)
+    for (uint8_t i = 0; i < kPageWithCrcAndDestinationSize; ++i)
     {
         EXPECT_CALL(sut_, uart_read())
             .WillRepeatedly(Invoke(onUartRead))
