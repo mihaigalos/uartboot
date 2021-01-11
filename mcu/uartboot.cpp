@@ -32,14 +32,6 @@ bool UartBoot::isCrcOk(const uint8_t (&in)[kPageWithCrcAndDestinationSize], cons
 
 void UartBoot::writePageToFlash(const uint8_t (&in)[kPageWithCrcAndDestinationSize]) const
 {
-    eraseApplication();
-
-    CRC32Type expectedCRC{0};
-    expectedCRC |= static_cast<CRC32Type>(in[kCRC32Offset + 0]) << 24;
-    expectedCRC |= static_cast<CRC32Type>(in[kCRC32Offset + 1]) << 16;
-    expectedCRC |= static_cast<CRC32Type>(in[kCRC32Offset + 2]) << 8;
-    expectedCRC |= static_cast<CRC32Type>(in[kCRC32Offset + 3]);
-
     DestinationAddreessType destinationAddress{0};
     destinationAddress |= static_cast<DestinationAddreessType>(in[kDestinationAddressOffset + 0]) << 8;
     destinationAddress |= static_cast<DestinationAddreessType>(in[kDestinationAddressOffset + 1]);
@@ -94,4 +86,9 @@ const TECommunicationResult UartBoot::safeReadPageWithMetadataFromHost(uint8_t (
     }
 
     return result;
+}
+
+void UartBoot::main()
+{
+    eraseApplication();
 }
