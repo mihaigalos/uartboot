@@ -25,13 +25,13 @@ protected:
 
 TEST_F(Fixture, ReadUartOk_WhenTypical)
 {
-    uint8_t expected[kMetadataSize];
-    uint8_t actual[kMetadataSize];
+    Metadata expected;
+    Metadata actual;
 
     InSequence seq;
     for (uint8_t i = 0; i < kMetadataSize; ++i)
     {
-        expected[i] = i;
+        expected.byte_array[i] = i;
         EXPECT_CALL(sut_, uart_read())
             .WillOnce(Return(i))
             .RetiresOnSaturation();
@@ -41,6 +41,6 @@ TEST_F(Fixture, ReadUartOk_WhenTypical)
 
     for (uint8_t i = 0; i < kMetadataSize; ++i)
     {
-        ASSERT_EQ(actual[i], expected[i]);
+        ASSERT_EQ(actual.byte_array[i], expected.byte_array[i]);
     }
 }

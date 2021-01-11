@@ -22,6 +22,11 @@ void UartBoot::eraseApplication() const
     }
 }
 
+const Metadata UartBoot::decodeMetadata(const uint8_t (&in)[kMetadataSize]) const
+{
+    return *reinterpret_cast<const Metadata *>(in);
+}
+
 uint32_t UartBoot::readLatestApplicationTimestampFromInternalEeprom() const
 {
     return 0xFFFFFFFF;
