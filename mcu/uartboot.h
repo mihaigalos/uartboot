@@ -40,7 +40,7 @@ union Metadata {
         char application_name[10]{'-', '-', '-', '-', '-', '-', '-', '-', '-', '-'};
         uint32_t application_timestamp{0};
         uint32_t writing_timestamp{0};
-        uint32_t crc32{0};
+        CRC32Type crc32{0};
         uint16_t length{0};
     } structure;
 
