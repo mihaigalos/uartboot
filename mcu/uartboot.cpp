@@ -22,11 +22,10 @@ bool UartBoot::isReflashNecessary(uint32_t &application_timestamp) const
     return false;
 }
 
-bool UartBoot::isCrcOk(const uint8_t (&in)[kPageWithCrcAndDestinationSize], const uint8_t length, const CRC32Type &expectedCrc) const
+bool UartBoot::isCrcOk(const void *in, const uint8_t length, const CRC32Type &expectedCrc) const
 {
     uint32_t crc{0};
-    crc32(reinterpret_cast<const void *>(&in[0]), length, &crc_table_[0],
-          &crc);
+    crc32(in, length, &crc_table_[0], &crc);
     return crc == expectedCrc;
 }
 
@@ -91,4 +90,10 @@ const TECommunicationResult UartBoot::safeReadPageWithMetadataFromHost(uint8_t (
 void UartBoot::main()
 {
     eraseApplication();
+
+    Metadata metadata;
+    readMetadata(metadata.byte_array);
+    if (isCrcOk(metadata.byte_array, sizeof(Metadata) - kSizeOfCRC32, metadata.structure.crc32))
+    {
+    }
 }
