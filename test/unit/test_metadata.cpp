@@ -71,8 +71,8 @@ TEST_F(Fixture, IsDecodedMetadataOk_WhenTypical)
 
     expected.structure.application_timestamp = 0x12345678;
     expected.structure.writing_timestamp = 0xBBCCDDEE;
-    expected.structure.crc32 = 0xAABBCCDD;
     expected.structure.length = 0x5678;
+    expected.structure.crc32 = 0xAABBCCDD;
 
     uint8_t data_in_big_endian_format[kMetadataSize]{
         0x90, 0x78,
@@ -80,8 +80,8 @@ TEST_F(Fixture, IsDecodedMetadataOk_WhenTypical)
         'm', 'y', 'a', 'p', 'p', '-', '-', '-', '-', '-',
         0x78, 0x56, 0x34, 0x12,
         0xEE, 0xDD, 0xCC, 0xBB,
-        0xDD, 0xCC, 0xBB, 0xAA,
-        0x78, 0x56};
+        0x78, 0x56,
+        0xDD, 0xCC, 0xBB, 0xAA};
 
     auto actual = sut_.decodeMetadata(data_in_big_endian_format);
 
