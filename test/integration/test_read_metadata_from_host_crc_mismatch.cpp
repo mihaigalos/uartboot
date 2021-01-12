@@ -39,14 +39,14 @@ protected:
     static uint8_t data_[kPageWithCrcAndDestinationSize];
 };
 
-uint8_t Fixture::data_[kPageWithCrcAndDestinationSize]{0xab, 0xd6, 0x9c, 0x3a, 0xd6, 0x22, 0xd1, 0x01,
+uint8_t Fixture::data_[kPageWithCrcAndDestinationSize]{0xAA, 0xd6, 0x9c, 0x3a, 0xd6, 0x22, 0xd1, 0x01,
                                                        0x6d, 0x88, 0xcf, 0xc4, 0x15, 0x1d, 0xad, 0x3e,
                                                        0x7a, 0xb9, 0x06, 0x4f, 0x21, 0x94, 0x23, 0xae,
                                                        0xa9, 0x20, 0xcf, 0x28, 0x87, 0xab};
 
-TEST_F(Fixture, ReadMetadataFromHostOk_WhenTypical)
+TEST_F(Fixture, ReadMetadataFromHostNotOk_WhenCrcMismatch)
 {
-    TECommunicationResult expected{TECommunicationResult::Ok};
+    TECommunicationResult expected{TECommunicationResult::CRCMismatch};
     TECommunicationResult actual{TECommunicationResult::Invalid};
     Metadata in;
     EXPECT_CALL(sut_, uart_read())
