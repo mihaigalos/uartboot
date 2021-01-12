@@ -67,7 +67,7 @@ uint8_t Fixture::data_[kPageWithCrcAndDestinationSize]{0x7e, 0x8a, 0x8b, 0xeb, 0
 TECommunicationResult Fixture::transmit_to_host_buffer_[8];
 uint8_t Fixture::pos_{0};
 
-TEST_F(Fixture, SafeReadPageFromHostCrcMismatch_WhenTypical)
+TEST_F(Fixture, SafeReadPageFromHostOneRetry_WhenTypical)
 {
     TECommunicationResult expected{TECommunicationResult::Ok};
     TECommunicationResult actual{TECommunicationResult::Invalid};

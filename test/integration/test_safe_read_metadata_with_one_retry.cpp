@@ -60,7 +60,7 @@ uint8_t Fixture::data_[kMetadataSize]{0xab, 0xd6, 0x9c, 0x3a, 0xd6, 0x22, 0xd1, 
 TECommunicationResult Fixture::transmit_to_host_buffer_[8];
 uint8_t Fixture::pos_{0};
 
-TEST_F(Fixture, SafeReadPageFromHostCrcMismatch_WhenTypical)
+TEST_F(Fixture, SafeReadMetadataFromHostOneRetry_WhenTypical)
 {
     TECommunicationResult expected{TECommunicationResult::Ok};
     TECommunicationResult actual{TECommunicationResult::Invalid};
