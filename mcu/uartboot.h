@@ -17,7 +17,7 @@ static constexpr uint16_t kNumberOfFlashPages{kFlashSize / kPageSize};
 static constexpr uint8_t kInvalidValue{0xFF};
 
 static constexpr uint8_t kPageWithCrcAndDestinationSize{kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress};
-static constexpr uint8_t kRetriesOnCommunicationFailure{3};
+static constexpr uint8_t kMaxTriesWithCommunicationFailure{3};
 
 #ifdef TESTING
 struct MemoryEmulator

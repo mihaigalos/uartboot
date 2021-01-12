@@ -40,7 +40,7 @@ public:
             result = data_[pos_];
             ++retransmit_count_;
         }
-        if (kRetriesOnCommunicationFailure - 1 == retransmit_count_)
+        if (kMaxTriesWithCommunicationFailure - 1 == retransmit_count_)
         {
             data_[kCRC32Offset + 3] = 0x2F;
         }
@@ -85,12 +85,12 @@ TEST_F(Fixture, SafeReadPageFromHostCrcMismatchRetransmitThreeTimes_WhenTypical)
 
     sut_.safeReadPageWithMetadataFromHost(in);
 
-    for (uint8_t i = 0; i < kRetriesOnCommunicationFailure - 1; ++i)
+    for (uint8_t i = 0; i < kMaxTriesWithCommunicationFailure - 1; ++i)
     {
         actual = transmit_to_host_buffer_[i];
         ASSERT_EQ(actual, TECommunicationResult::CRCMismatch);
     }
 
-    actual = transmit_to_host_buffer_[kRetriesOnCommunicationFailure - 1];
+    actual = transmit_to_host_buffer_[kMaxTriesWithCommunicationFailure - 1];
     ASSERT_EQ(actual, expected);
 }

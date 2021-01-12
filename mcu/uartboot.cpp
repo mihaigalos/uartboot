@@ -56,7 +56,7 @@ const TECommunicationResult UartBoot::safeReadMetadata(Metadata &metadata) const
 {
 
     TECommunicationResult result{TECommunicationResult::Invalid};
-    for (uint8_t tries = 0; tries < kRetriesOnCommunicationFailure && result != TECommunicationResult::Ok; ++tries)
+    for (uint8_t tries = 0; tries < kMaxTriesWithCommunicationFailure && result != TECommunicationResult::Ok; ++tries)
     {
         Metadata metadata;
         result = readMetadata(metadata);
@@ -91,7 +91,7 @@ const TECommunicationResult UartBoot::safeReadPageWithMetadataFromHost(uint8_t (
 {
     TECommunicationResult result{TECommunicationResult::Invalid};
 
-    for (uint8_t tries = 0; tries < kRetriesOnCommunicationFailure && result != TECommunicationResult::Ok; ++tries)
+    for (uint8_t tries = 0; tries < kMaxTriesWithCommunicationFailure && result != TECommunicationResult::Ok; ++tries)
     {
         result = readPageWithMetadataFromHost(in);
         uart_write(static_cast<uint8_t>(result));
