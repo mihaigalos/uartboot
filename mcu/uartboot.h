@@ -50,6 +50,7 @@ union Metadata {
 
 static constexpr uint8_t kMetadataSize{sizeof(Metadata)};
 static_assert(kMetadataSize == sizeof(Metadata::byte_array), "kMetadataSize and byte_array size do not match!");
+static constexpr uint8_t kCRC32OffsetInMetadata{30};
 
 enum class TECommunicationResult
 {

@@ -50,7 +50,7 @@ const TECommunicationResult UartBoot::readMetadata(Metadata &metadata) const
         return TECommunicationResult::CRCMismatch;
     }
 
-    return TECommunicationResult::CRCMismatch;
+    return TECommunicationResult::Ok;
 }
 const TECommunicationResult UartBoot::safeReadMetadata(Metadata &metadata) const
 {
