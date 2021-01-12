@@ -73,7 +73,7 @@ TECommunicationResult Fixture::transmit_to_host_buffer_[8];
 uint8_t Fixture::pos_{0};
 uint8_t Fixture::retransmit_count_{0};
 
-TEST_F(Fixture, SafeReadPageFromHostCrcMismatchRetransmitThreeTimes_WhenTypical)
+TEST_F(Fixture, SafeReadPageFromHostCrcMismatchRetransmitTwoTimes_WhenTypical)
 {
     TECommunicationResult expected{TECommunicationResult::Ok};
     TECommunicationResult actual{TECommunicationResult::Invalid};
