@@ -26,4 +26,4 @@ jobs:
 
       - name: Build and Test
         run: |
-          bazel query //... | grep test_ | xargs bazel test --color=yes 2>&1 
+          bazel test //... --color=yes 2>&1 
