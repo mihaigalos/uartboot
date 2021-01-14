@@ -96,6 +96,7 @@ cc_binary(
         ":bootloader_h",
         "@avr-bootloader-common",
     ],
+    tags=["mcu_binary_file"]
 )
 
 [
@@ -182,15 +183,18 @@ cc_binary(
 hex(
     name = "uartboot_hex",
     src = ":uartboot.elf",
+    tags=["mcu_binary_file"],
 )
 
 eeprom(
     name = "uartboot_eeprom",
     src = ":uartboot.elf",
+    tags=["mcu_binary_file"],
 )
 
 listing(
     name = "uartboot_listing",
     src = ":uartboot.elf",
+    tags=["mcu_binary_file"],
 )
 
