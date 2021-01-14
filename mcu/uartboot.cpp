@@ -58,7 +58,6 @@ const TECommunicationResult UartBoot::safeReadMetadata(Metadata &metadata) const
     TECommunicationResult result{TECommunicationResult::Invalid};
     for (uint8_t tries = 0; tries < kMaxTriesWithCommunicationFailure && result != TECommunicationResult::Ok; ++tries)
     {
-        Metadata metadata;
         result = readMetadata(metadata);
         uart_write(static_cast<uint8_t>(result));
     }
@@ -100,7 +99,33 @@ const TECommunicationResult UartBoot::safeReadPageWithMetadataFromHost(uint8_t (
     return result;
 }
 
-void UartBoot::main()
+TEFlashResult UartBoot::main() const
 {
+    TEFlashResult result{TEFlashResult::Invalid};
     eraseApplication();
+
+    Metadata metadata{};
+
+    if (TECommunicationResult::Ok == safeReadMetadata(metadata) && isReflashNecessary(metadata.structure.application_timestamp))
+    {
+        for (uint16_t i = 0; i < metadata.structure.length; ++i)
+        {
+            result = TEFlashResult::Ok;
+            uint8_t in[kPageWithCrcAndDestinationSize];
+            if (TECommunicationResult::Ok == safeReadPageWithMetadataFromHost(in))
+            {
+                writePageToFlash(in);
+            }
+            else
+            {
+                result = TEFlashResult::FlashFailed;
+                break;
+            }
+        }
+        if (TEFlashResult::Ok == result)
+        {
+            writeLatestApplicationTimestampToInternalEeprom(metadata.structure.application_timestamp);
+        }
+    }
+    return result;
 }
