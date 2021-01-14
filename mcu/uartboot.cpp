@@ -78,7 +78,7 @@ const TECommunicationResult UartBoot::readPageWithMetadataFromHost(uint8_t (&in)
     expectedCrc |= static_cast<CRC32Type>(in[kCRC32Offset + 2]) << 8;
     expectedCrc |= static_cast<CRC32Type>(in[kCRC32Offset + 3]);
 
-    if (!isCrcOk(in, kPageSize, expectedCrc))
+    if (!isCrcOk(in, kPageSize + kSizeOfDestinationAddress, expectedCrc))
     {
         return TECommunicationResult::CRCMismatch;
     }

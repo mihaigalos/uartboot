@@ -22,13 +22,13 @@ class Fixture : public ::testing::Test
 public:
     void SetUp() override
     {
-        data_[kCRC32Offset + 0] = 0x7D;
-        data_[kCRC32Offset + 1] = 0xD1;
-        data_[kCRC32Offset + 2] = 0x2D;
-        data_[kCRC32Offset + 3] = 0x2F;
-
         data_[kDestinationAddressOffset + 0] = 0x00;
         data_[kDestinationAddressOffset + 1] = 0x00;
+
+        data_[kCRC32Offset + 0] = 0x16;
+        data_[kCRC32Offset + 1] = 0x1A;
+        data_[kCRC32Offset + 2] = 0x0B;
+        data_[kCRC32Offset + 3] = 0x36;
     }
     static uint8_t onUartRead()
     {

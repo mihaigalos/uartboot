@@ -9,14 +9,14 @@ static constexpr uint8_t kSizeOfCRC32{sizeof(CRC32Type)};
 static constexpr uint16_t kSizeOfDestinationAddress{sizeof(DestinationAddreessType)};
 
 static constexpr uint8_t kPageSize{SPM_PAGESIZE};
-static constexpr uint8_t kCRC32Offset{kPageSize};
-static constexpr uint8_t kDestinationAddressOffset{kCRC32Offset + kSizeOfCRC32};
+static constexpr uint8_t kDestinationAddressOffset{kPageSize};
+static constexpr uint8_t kCRC32Offset{kDestinationAddressOffset + kSizeOfDestinationAddress};
 
 static constexpr uint16_t kFlashSize{32 * 1024};
 static constexpr uint16_t kNumberOfFlashPages{kFlashSize / kPageSize};
 static constexpr uint8_t kInvalidValue{0xFF};
 
-static constexpr uint8_t kPageWithCrcAndDestinationSize{kPageSize + kSizeOfCRC32 + kSizeOfDestinationAddress};
+static constexpr uint8_t kPageWithCrcAndDestinationSize{kPageSize + kSizeOfDestinationAddress + kSizeOfCRC32};
 static constexpr uint8_t kMaxTriesWithCommunicationFailure{3};
 
 #ifdef TESTING
