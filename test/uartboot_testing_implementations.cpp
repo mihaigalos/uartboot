@@ -35,7 +35,7 @@ uint32_t UartBoot::readLatestApplicationTimestampFromInternalEeprom() const
 void UartBoot::writeLatestApplicationTimestampToInternalEeprom(const uint32_t latest_timestamp) const
 {
 }
-uint16_t UartBoot::readWordFromMetadata(uint16_t address) const
+uint16_t UartBoot::readWordFromMetadata(const uint16_t address) const
 {
     return 0xFFFF;
 }

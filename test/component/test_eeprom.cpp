@@ -29,7 +29,6 @@ TEST_F(Fixture, IsReflashNecessaryWorks_WhenTypical)
     bool actual{false};
     uint32_t current_timestamp{0};
     EXPECT_CALL(sut_, readLatestApplicationTimestampFromInternalEeprom()).WillOnce(Return(0xFFFFFFFF));
-    EXPECT_CALL(sut_, readWordFromMetadata(_)).WillOnce(Return(0x1234)).WillRepeatedly(Return(0x5678));
 
     actual = sut_.isReflashNecessary(current_timestamp);
 
@@ -40,9 +39,8 @@ TEST_F(Fixture, IsReflashNecessaryNotPerformed_WhenTypical)
 {
     bool expected{false};
     bool actual{false};
-    uint32_t current_timestamp{0};
+    uint32_t current_timestamp{0x12345678};
     EXPECT_CALL(sut_, readLatestApplicationTimestampFromInternalEeprom()).WillOnce(Return(0x12345678));
-    EXPECT_CALL(sut_, readWordFromMetadata(_)).WillOnce(Return(0x1234)).WillRepeatedly(Return(0x5678));
 
     actual = sut_.isReflashNecessary(current_timestamp);
 

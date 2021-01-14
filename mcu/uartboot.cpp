@@ -5,15 +5,10 @@ UartBoot::UartBoot()
     init_table(&crc_table_[0]);
 }
 
-bool UartBoot::isReflashNecessary(uint32_t &application_timestamp) const
+bool UartBoot::isReflashNecessary(const uint32_t &application_timestamp) const
 {
     const uint32_t current_application_timestamp =
         readLatestApplicationTimestampFromInternalEeprom();
-
-    application_timestamp =
-        static_cast<uint32_t>(readWordFromMetadata(timestamp_application_byte_offset))
-        << 16;
-    application_timestamp |= static_cast<uint32_t>(readWordFromMetadata(timestamp_application_byte_offset + 2));
 
     if (eeprom_not_programmed == current_application_timestamp)
         return true;
