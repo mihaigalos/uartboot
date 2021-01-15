@@ -68,12 +68,7 @@ const TECommunicationResult UartBoot::readPageWithMetadataFromHost(Page &page) c
         page.byte_array[readBytes] = uart_read();
     }
 
-    CRC32Type expectedCrc = static_cast<CRC32Type>(page.byte_array[kCRC32Offset + 0]) << 24;
-    expectedCrc |= static_cast<CRC32Type>(page.byte_array[kCRC32Offset + 1]) << 16;
-    expectedCrc |= static_cast<CRC32Type>(page.byte_array[kCRC32Offset + 2]) << 8;
-    expectedCrc |= static_cast<CRC32Type>(page.byte_array[kCRC32Offset + 3]);
-
-    if (!isCrcOk(page.byte_array, kPageSize + kSizeOfDestinationAddress, expectedCrc))
+    if (!isCrcOk(page.byte_array, kPageSize + kSizeOfDestinationAddress, page.structure.crc32))
     {
         return TECommunicationResult::CRCMismatch;
     }
