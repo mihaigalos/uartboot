@@ -19,11 +19,25 @@ jobs:
 
       - name: Install dependencies
         run: |
-          wget https://github.com/bazelbuild/bazel/releases/download/3.4.1/bazel_3.4.1-linux-x86_64.deb
-          sudo dpkg -i bazel_3.4.1-linux-x86_64.deb
           sudo apt install lcov
           sudo apt install pkg-config
 
       - name: Build and Test
         run: |
-          bazel test //... --color=yes 2>&1 
+          bazel test //... --color=yes 2>&1
+
+  converage:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt install lcov
+          sudo apt install pkg-config
+
+      - name: Compute and publish Coverage Report
+        run: |
+          bazel coverage --instrumentation_filter="[:]" --instrument_test_targets=true --combined_report=lcov --sandbox_base=/run/shm //...
+          genhtml bazel-out/_coverage/_coverage_report.dat --output-directory coverage
