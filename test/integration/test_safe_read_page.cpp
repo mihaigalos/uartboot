@@ -63,13 +63,13 @@ TEST_F(Fixture, SafeReadPageFromHostOk_WhenTypical)
 {
     TECommunicationResult expected{TECommunicationResult::Ok};
     TECommunicationResult actual{TECommunicationResult::Invalid};
-    uint8_t in[kPageWithCrcAndDestinationSize];
+    Page page{};
     EXPECT_CALL(sut_, uart_read())
         .WillRepeatedly(Invoke(onUartRead));
     EXPECT_CALL(sut_, uart_write(_))
         .WillRepeatedly(Invoke([&](uint8_t param) { Fixture::onUartWrite(param); }));
 
-    sut_.safeReadPageWithMetadataFromHost(in);
+    sut_.safeReadPageWithMetadataFromHost(page);
 
     actual = buffer_[0];
     ASSERT_EQ(actual, expected);

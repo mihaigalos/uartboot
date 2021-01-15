@@ -59,21 +59,21 @@ const TECommunicationResult UartBoot::safeReadMetadata(Metadata &metadata) const
     return result;
 }
 
-const TECommunicationResult UartBoot::readPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const
+const TECommunicationResult UartBoot::readPageWithMetadataFromHost(Page &page) const
 {
     uint8_t readBytes{0};
 
     for (; readBytes < kPageWithCrcAndDestinationSize; ++readBytes)
     {
-        in[readBytes] = uart_read();
+        page.byte_array[readBytes] = uart_read();
     }
 
-    CRC32Type expectedCrc = static_cast<CRC32Type>(in[kCRC32Offset + 0]) << 24;
-    expectedCrc |= static_cast<CRC32Type>(in[kCRC32Offset + 1]) << 16;
-    expectedCrc |= static_cast<CRC32Type>(in[kCRC32Offset + 2]) << 8;
-    expectedCrc |= static_cast<CRC32Type>(in[kCRC32Offset + 3]);
+    CRC32Type expectedCrc = static_cast<CRC32Type>(page.byte_array[kCRC32Offset + 0]) << 24;
+    expectedCrc |= static_cast<CRC32Type>(page.byte_array[kCRC32Offset + 1]) << 16;
+    expectedCrc |= static_cast<CRC32Type>(page.byte_array[kCRC32Offset + 2]) << 8;
+    expectedCrc |= static_cast<CRC32Type>(page.byte_array[kCRC32Offset + 3]);
 
-    if (!isCrcOk(in, kPageSize + kSizeOfDestinationAddress, expectedCrc))
+    if (!isCrcOk(page.byte_array, kPageSize + kSizeOfDestinationAddress, expectedCrc))
     {
         return TECommunicationResult::CRCMismatch;
     }
@@ -81,13 +81,13 @@ const TECommunicationResult UartBoot::readPageWithMetadataFromHost(uint8_t (&in)
     return TECommunicationResult::Ok;
 }
 
-const TECommunicationResult UartBoot::safeReadPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const
+const TECommunicationResult UartBoot::safeReadPageWithMetadataFromHost(Page &page) const
 {
     TECommunicationResult result{TECommunicationResult::Invalid};
 
     for (uint8_t tries = 0; tries < kMaxTriesWithCommunicationFailure && result != TECommunicationResult::Ok; ++tries)
     {
-        result = readPageWithMetadataFromHost(in);
+        result = readPageWithMetadataFromHost(page);
         uart_write(static_cast<uint8_t>(result));
     }
 
@@ -106,10 +106,10 @@ TEFlashResult UartBoot::main() const
         for (uint16_t i = 0; i < metadata.structure.length; ++i)
         {
             result = TEFlashResult::Ok;
-            uint8_t in[kPageWithCrcAndDestinationSize];
-            if (TECommunicationResult::Ok == safeReadPageWithMetadataFromHost(in))
+            Page page{};
+            if (TECommunicationResult::Ok == safeReadPageWithMetadataFromHost(page))
             {
-                writePageToFlash(in);
+                writePageToFlash(page.byte_array);
             }
             else
             {

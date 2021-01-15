@@ -52,6 +52,22 @@ static constexpr uint8_t kMetadataSize{sizeof(Metadata)};
 static_assert(kMetadataSize == sizeof(Metadata::byte_array), "kMetadataSize and byte_array size do not match!");
 static constexpr uint8_t kCRC32OffsetInMetadata{30};
 
+#pragma pack(push, 1)
+union Page {
+    Page() = default;
+    struct StructureType
+    {
+        StructureType() = default;
+        uint8_t page[kPageSize];
+        DestinationAddreessType destination;
+        CRC32Type crc32;
+    } structure;
+    uint8_t(byte_array)[sizeof(StructureType)];
+};
+#pragma pack(pop)
+
+static_assert(kPageWithCrcAndDestinationSize == sizeof(Page::byte_array), "kPageWithCrcAndDestinationSize and byte_array size do not match!");
+
 enum class TECommunicationResult
 {
     Invalid,
@@ -76,8 +92,8 @@ public:
     void writePageToFlash(const uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;
     const TECommunicationResult readMetadata(Metadata &metadata) const;
     const TECommunicationResult safeReadMetadata(Metadata &metadata) const;
-    const TECommunicationResult readPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;
-    const TECommunicationResult safeReadPageWithMetadataFromHost(uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;
+    const TECommunicationResult readPageWithMetadataFromHost(Page &page) const;
+    const TECommunicationResult safeReadPageWithMetadataFromHost(Page &page) const;
 #ifdef TESTING
     const Metadata decodeMetadata(const uint8_t (&in)[kMetadataSize]) const;
     virtual void writePageBufferToFlash(const uint16_t address) const;

@@ -76,13 +76,13 @@ TEST_F(Fixture, SafeReadPageFromHostCrcMismatchRetransmitTwoTimes_WhenTypical)
 {
     TECommunicationResult expected{TECommunicationResult::Ok};
     TECommunicationResult actual{TECommunicationResult::Invalid};
-    uint8_t in[kPageWithCrcAndDestinationSize];
+    Page page{};
     EXPECT_CALL(sut_, uart_read())
         .WillRepeatedly(Invoke(onUartRead));
     EXPECT_CALL(sut_, uart_write(_))
         .WillRepeatedly(Invoke([&](uint8_t param) { Fixture::onUartWrite(param); }));
 
-    sut_.safeReadPageWithMetadataFromHost(in);
+    sut_.safeReadPageWithMetadataFromHost(page);
 
     for (uint8_t i = 0; i < kMaxTriesWithCommunicationFailure - 1; ++i)
     {

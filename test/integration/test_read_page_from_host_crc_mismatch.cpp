@@ -54,11 +54,11 @@ TEST_F(Fixture, ReadPageFromHostNotOk_WhenCrcMismatch)
 {
     TECommunicationResult expected{TECommunicationResult::CRCMismatch};
     TECommunicationResult actual{TECommunicationResult::Invalid};
-    uint8_t in[kPageWithCrcAndDestinationSize];
+    Page page{};
     EXPECT_CALL(sut_, uart_read())
         .WillRepeatedly(Invoke(onUartRead));
 
-    actual = sut_.readPageWithMetadataFromHost(in);
+    actual = sut_.readPageWithMetadataFromHost(page);
 
     ASSERT_EQ(actual, expected);
 }
