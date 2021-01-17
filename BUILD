@@ -1,8 +1,12 @@
-load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 load("@avr_tools//tools/avr:hex.bzl", "eeprom", "hex", "listing")
+load("@bazel_gazelle//:def.bzl", "gazelle")
+load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
 
 BOOTLOADER_START_ADDRESS = "0x7800"
+
 EEPROM_CONFIGURATION_START_BYTE = "0x03F6"
+
 F_CPU = "8000000UL"
 
 DEFAULT_COMPILER_OPTIONS = [
@@ -40,7 +44,6 @@ DEFAULT_TEST_LINK_OPTIONS = [
     "-static-libasan",
 ]
 
-
 DEFAULT_TEST_DEPS = [
     "@gtest",
     "@gtest//:gtest_main",
@@ -67,17 +70,19 @@ genrule(
 cc_library(
     name = "bootloader_h",
     srcs = [":gen_bootloader_h"],
-    linkstatic=1,
+    linkstatic = 1,
 )
-
 
 cc_binary(
     name = "uartboot.elf",
-    srcs = glob([
-        "mcu/**/*.cpp",
-        "mcu/**/*.c",
-        "mcu/**/*.h",
-    ],exclude = ["mcu/testing_helper.h"]),
+    srcs = glob(
+        [
+            "mcu/**/*.cpp",
+            "mcu/**/*.c",
+            "mcu/**/*.h",
+        ],
+        exclude = ["mcu/testing_helper.h"],
+    ),
     copts = select({
         ":avr": [
             "-DF_CPU=" + F_CPU,
@@ -85,18 +90,18 @@ cc_binary(
         "//conditions:default": [],
     }),
     includes = [
-        "mcu",
         "avr-bootloader-common",
+        "mcu",
     ],
     linkopts = select({
         ":avr": DEFAULT_COMPILER_OPTIONS,
         "//conditions:default": [],
     }),
+    tags = ["mcu_binary_file"],
     deps = [
         ":bootloader_h",
         "@avr-bootloader-common",
     ],
-    tags=["mcu_binary_file"]
 )
 
 [
@@ -116,8 +121,8 @@ cc_binary(
         ],
         linkopts = DEFAULT_TEST_LINK_OPTIONS,
         tags = ["component"],
-        deps = DEFAULT_TEST_DEPS+[
-             "@avr-bootloader-common",
+        deps = DEFAULT_TEST_DEPS + [
+            "@avr-bootloader-common",
         ],
     )
     for component_name in [
@@ -143,8 +148,8 @@ cc_binary(
         ],
         linkopts = DEFAULT_TEST_LINK_OPTIONS,
         tags = ["unit"],
-        deps = DEFAULT_TEST_DEPS+[
-             "@avr-bootloader-common",
+        deps = DEFAULT_TEST_DEPS + [
+            "@avr-bootloader-common",
         ],
     )
     for unit_name in [
@@ -170,8 +175,8 @@ cc_binary(
         ],
         linkopts = DEFAULT_TEST_LINK_OPTIONS,
         tags = ["integration"],
-        deps = DEFAULT_TEST_DEPS+[
-             "@avr-bootloader-common",
+        deps = DEFAULT_TEST_DEPS + [
+            "@avr-bootloader-common",
         ],
     )
     for integration_name in [
@@ -183,18 +188,25 @@ cc_binary(
 hex(
     name = "uartboot_hex",
     src = ":uartboot.elf",
-    tags=["mcu_binary_file"],
+    tags = ["mcu_binary_file"],
 )
 
 eeprom(
     name = "uartboot_eeprom",
     src = ":uartboot.elf",
-    tags=["mcu_binary_file"],
+    tags = ["mcu_binary_file"],
 )
 
 listing(
     name = "uartboot_listing",
     src = ":uartboot.elf",
-    tags=["mcu_binary_file"],
+    tags = ["mcu_binary_file"],
 )
 
+buildifier(name = "buildifier")
+
+gazelle(
+    name = "gazelle",
+    command = "fix",
+    prefix = "github.com/mihaigalos/uartboot",
+)
