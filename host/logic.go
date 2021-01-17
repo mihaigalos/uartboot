@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	myparser "github.com/mihaigalos/intel_hex_parser/parser"
+	myparser "github.com/mihaigalos/intel-hex-parser/parser"
 )
 
 func parseFile() {

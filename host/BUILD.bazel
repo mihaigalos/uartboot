@@ -8,7 +8,7 @@ go_library(
     ],
     importpath = "github.com/mihaigalos/uartboot/host",
     visibility = ["//visibility:private"],
-    deps = ["@intel_hex_parser//parser:parser_lib"],
+    deps = ["@intel-hex-parser//parser:parser_lib"],
 )
 
 go_binary(
