@@ -12,7 +12,7 @@ bool UartBoot::isReflashNecessary(const uint32_t &application_timestamp) const
 
     if (eeprom_not_programmed == current_application_timestamp)
         return true;
-    if (application_timestamp != current_application_timestamp)
+    if (application_timestamp > current_application_timestamp)
         return true;
     return false;
 }
