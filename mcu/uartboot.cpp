@@ -5,7 +5,7 @@ UartBoot::UartBoot()
     init_table(&crc_table_[0]);
 }
 
-bool UartBoot::isReflashNecessary(const uint32_t &application_timestamp) const
+const bool UartBoot::isReflashNecessary(const uint32_t &application_timestamp) const
 {
     const uint32_t current_application_timestamp =
         readLatestApplicationTimestampFromInternalEeprom();
@@ -17,7 +17,7 @@ bool UartBoot::isReflashNecessary(const uint32_t &application_timestamp) const
     return false;
 }
 
-bool UartBoot::isCrcOk(const void *in, const uint8_t length, const CRC32Type &expectedCrc) const
+const bool UartBoot::isCrcOk(const void *in, const uint8_t length, const CRC32Type &expectedCrc) const
 {
     uint32_t crc{0};
     crc32(in, length, &crc_table_[0], &crc);
@@ -89,7 +89,7 @@ const TECommunicationResult UartBoot::safeReadPageWithMetadataFromHost(Page &pag
     return result;
 }
 
-TEFlashResult UartBoot::main() const
+const TEFlashResult UartBoot::main() const
 {
     TEFlashResult result{TEFlashResult::Invalid};
     eraseApplication();
