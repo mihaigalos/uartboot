@@ -75,6 +75,6 @@ git_repository(
 
 go_repository(
     name = "intel-hex-parser",
-    commit = "93e825890b53ec109a8846b87d63bba826c17056",
+    commit = "5360512e0fa8778e1d1759ea74637cdd57e35a3e",
     importpath = "github.com/mihaigalos/intel-hex-parser",
 )
