@@ -41,7 +41,7 @@ func appendCRC32(page *Page, crcTable *crc32.Table) {
 	page[kOffsetCRC32+0] = uint8(computedCrc32)
 }
 
-func serializePage(page Page) {
+func serializePage(page *Page) {
 	fmt.Println("\n")
 	for i := 0; i < kPageSize; i++ {
 		fmt.Printf("%02X", page[i])
@@ -49,4 +49,10 @@ func serializePage(page Page) {
 			fmt.Println("")
 		}
 	}
+}
+
+func send(page *Page, pageCount int, crcTable *crc32.Table) {
+	appendDestination(page, pageCount)
+	appendCRC32(page, crcTable)
+	serializePage(page)
 }

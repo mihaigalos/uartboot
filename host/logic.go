@@ -11,6 +11,9 @@ import (
 )
 
 type Page [kPageSize]uint8
+type HexFile struct {
+	lines []string
+}
 
 func linesInFile(fileName string) []string {
 	var lines []string
@@ -30,23 +33,28 @@ func linesInFile(fileName string) []string {
 	return lines
 }
 
+func NewHexFile(fileName string) *HexFile {
+	f := new(HexFile)
+	f.lines = linesInFile(fileName)
+
+	if !myparser.IsFileValid(f.lines) {
+		log.Fatalf("Failed CRC check: %s", fileName)
+		return nil
+	}
+	return f
+}
+
 func sendOverUart(args []string) bool {
 
-	fileName := args[0]
-	lines := linesInFile(fileName)
-
-	if !myparser.IsFileValid(lines) {
-		log.Fatalf("Failed CRC check: %s", fileName)
-		return false
-	}
+	hexFile := NewHexFile(args[0])
 
 	page := newPage()
 	posInPage := 0
 	pageCount := 0
 
-	var IEEETable = crc32.MakeTable(crc32.IEEE)
+	var crcTable = crc32.MakeTable(crc32.IEEE)
 
-	for _, line := range lines {
+	for _, line := range hexFile.lines {
 		n := int(myparser.NumberOfBytes(line))
 		payload := myparser.Payload(line)
 
@@ -55,9 +63,7 @@ func sendOverUart(args []string) bool {
 			posInPage++
 
 			if posInPage == kPayloadInPageSize {
-				appendDestination(&page, pageCount)
-				appendCRC32(&page, IEEETable)
-				serializePage(page)
+				send(&page, pageCount, crcTable)
 				page = newPage()
 				posInPage = 0
 				pageCount++
@@ -66,9 +72,7 @@ func sendOverUart(args []string) bool {
 	}
 
 	if posInPage != 0 {
-		appendDestination(&page, pageCount)
-		appendCRC32(&page, IEEETable)
-		serializePage(page)
+		send(&page, pageCount, crcTable)
 	}
 	fmt.Printf("\n\nDone. Wrote %d pages.\n", pageCount+1)
 	return true
