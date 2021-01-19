@@ -5,6 +5,7 @@ go_library(
     srcs = [
         "logic.go",
         "main.go",
+        "page.go",
     ],
     importpath = "github.com/mihaigalos/uartboot/host",
     visibility = ["//visibility:private"],
