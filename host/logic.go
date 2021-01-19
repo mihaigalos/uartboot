@@ -75,7 +75,7 @@ func serializePage(page Page) {
 	}
 }
 
-func parseFile(args []string) bool {
+func sendOverUart(args []string) bool {
 
 	fileName := args[0]
 	lines := linesInFile(fileName)
