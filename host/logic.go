@@ -1,48 +1,13 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"hash/crc32"
-	"log"
-	"os"
 
 	myparser "github.com/mihaigalos/intel-hex-parser/parser"
 )
 
 type Page [kPageSize]uint8
-type HexFile struct {
-	lines []string
-}
-
-func linesInFile(fileName string) []string {
-	var lines []string
-	file, err := os.Open(fileName)
-
-	if err != nil {
-		log.Fatalf("Failed to open file: %s", fileName)
-	}
-
-	scanner := bufio.NewScanner(file)
-	scanner.Split(bufio.ScanLines)
-
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-	file.Close()
-	return lines
-}
-
-func NewHexFile(fileName string) *HexFile {
-	f := new(HexFile)
-	f.lines = linesInFile(fileName)
-
-	if !myparser.IsFileValid(f.lines) {
-		log.Fatalf("Failed CRC check: %s", fileName)
-		return nil
-	}
-	return f
-}
 
 func sendOverUart(args []string) bool {
 
