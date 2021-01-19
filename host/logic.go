@@ -66,7 +66,7 @@ func appendCRC32(page *Page, crcTable *crc32.Table) {
 }
 
 func serializePage(page Page) {
-	fmt.Println("\n------------------------")
+	fmt.Println("\n")
 	for i := 0; i < kPageSize; i++ {
 		fmt.Printf("%02X", page[i])
 		if (i+1)%16 == 0 && i != 0 {
@@ -111,11 +111,10 @@ func parseFile(args []string) bool {
 	}
 
 	if posInPage != 0 {
-		fmt.Println("--->2 posInPage: %d", posInPage)
 		appendDestination(&page, pageCount)
 		appendCRC32(&page, IEEETable)
 		serializePage(page)
 	}
-	fmt.Printf("\n\nDone. Written %d pages.\n", pageCount)
+	fmt.Printf("\n\nDone. Written %d pages.\n", pageCount+1)
 	return true
 }
