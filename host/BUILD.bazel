@@ -4,6 +4,7 @@ go_library(
     name = "host_lib",
     srcs = [
         "file.go",
+        "io.go",
         "logic.go",
         "main.go",
         "page.go",
