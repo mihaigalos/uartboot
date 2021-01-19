@@ -115,6 +115,6 @@ func sendOverUart(args []string) bool {
 		appendCRC32(&page, IEEETable)
 		serializePage(page)
 	}
-	fmt.Printf("\n\nDone. Written %d pages.\n", pageCount+1)
+	fmt.Printf("\n\nDone. Wrote %d pages.\n", pageCount+1)
 	return true
 }
