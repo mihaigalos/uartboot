@@ -78,3 +78,9 @@ go_repository(
     commit = "8900a6a955b3da19d8a6029be4ee4e103ea988e6",
     importpath = "github.com/mihaigalos/intel-hex-parser",
 )
+
+go_repository(
+    name = "go-serial",
+    commit = "d70dd9211da4fb7faaf61aa700215828010c68e3",
+    importpath = "github.com/mihaigalos/go-serial",
+)

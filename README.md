@@ -6,5 +6,5 @@ An UART bootloader for Arduino/AVR.
 
 ** Warning **
 
-It is the responsibility of the host side to fill the page buffer with unprogrammed values (0xFF) to simplify logic on the mcu side.
-The mcu side will always read a fixed-buffer array like this.
+Using CuteCom on Linux for operations with the serial port.
+Need to cd to bazel-bin/ and run the executable with sudo from there, since `sudo bazel run //host:host demo.hex` would rebuild everything for `root`. 

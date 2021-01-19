@@ -26,6 +26,14 @@ func appendDestination(page *Page, pageCount int) {
 	page[kOffsetDestination+1] = uint8(totalBytesWritten)
 }
 
+func pageToByteArray(page *Page) []byte {
+	byteArray := make([]byte, kPageSize)
+	for i := 0; i < kPageSize; i++ {
+		byteArray[i] = byte(page[i])
+	}
+	return byteArray
+}
+
 func appendCRC32(page *Page, crcTable *crc32.Table) {
 
 	byteArray := make([]byte, kPayloadInPageSize)

@@ -7,7 +7,7 @@ import (
 	myparser "github.com/mihaigalos/intel-hex-parser/parser"
 )
 
-type Page [kPageSize]uint8
+type Page [kPageSize]byte
 
 func sendOverUart(args []string) bool {
 

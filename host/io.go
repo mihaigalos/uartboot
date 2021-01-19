@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"hash/crc32"
+	"log"
+
+	"github.com/mihaigalos/go-serial/serial"
 )
 
 func serializePageToStdout(page *Page) {
@@ -16,11 +19,27 @@ func serializePageToStdout(page *Page) {
 }
 
 func serializePageToUart(page *Page) {
+	options := serial.OpenOptions{
+		PortName:        "/dev/ttyUSB0",
+		BaudRate:        38400,
+		DataBits:        8,
+		StopBits:        1,
+		MinimumReadSize: 1,
+	}
 
+	port, err := serial.Open(options)
+	if err != nil {
+		log.Fatalf("serial.Open: %v", err)
+	}
+
+	_, err = port.Write(pageToByteArray(page))
+
+	port.Close()
 }
 
 func send(page *Page, pageCount int, crcTable *crc32.Table) {
 	appendDestination(page, pageCount)
 	appendCRC32(page, crcTable)
 	serializePageToStdout(page)
+	serializePageToUart(page)
 }
