@@ -40,6 +40,5 @@ func serializePageToUart(page *Page) {
 func send(page *Page, pageCount int, crcTable *crc32.Table) {
 	appendDestination(page, pageCount)
 	appendCRC32(page, crcTable)
-	serializePageToStdout(page)
 	serializePageToUart(page)
 }

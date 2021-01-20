@@ -12,6 +12,7 @@ go_library(
     importpath = "github.com/mihaigalos/uartboot/host",
     visibility = ["//visibility:private"],
     deps = [
+        "@go-bar//bar",
         "@go-serial//serial",
         "@intel-hex-parser//parser:parser_lib",
     ],

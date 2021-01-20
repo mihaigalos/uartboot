@@ -8,10 +8,6 @@ import (
 	myparser "github.com/mihaigalos/intel-hex-parser/parser"
 )
 
-type HexFile struct {
-	lines []string
-}
-
 func linesInFile(fileName string) []string {
 	var lines []string
 	file, err := os.Open(fileName)
@@ -30,13 +26,13 @@ func linesInFile(fileName string) []string {
 	return lines
 }
 
-func NewHexFile(fileName string) *HexFile {
-	f := new(HexFile)
-	f.lines = linesInFile(fileName)
+func NewHexFile(fileName string) []string {
+	var lines []string
+	lines = linesInFile(fileName)
 
-	if !myparser.IsFileValid(f.lines) {
+	if !myparser.IsFileValid(lines) {
 		log.Fatalf("Failed CRC check: %s", fileName)
 		return nil
 	}
-	return f
+	return lines
 }

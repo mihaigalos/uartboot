@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"hash/crc32"
 
+	"github.com/mihaigalos/go-bar/bar"
 	myparser "github.com/mihaigalos/intel-hex-parser/parser"
 )
 
@@ -12,6 +13,8 @@ type Page [kPageSize]byte
 func sendOverUart(args []string) bool {
 
 	hexFile := NewHexFile(args[0])
+	var progressBar bar.Bar
+	progressBar.New(0, myparser.TotalNumberOfBytes(hexFile))
 
 	page := newPage()
 	posInPage := 0
@@ -19,7 +22,7 @@ func sendOverUart(args []string) bool {
 
 	var crcTable = crc32.MakeTable(crc32.IEEE)
 
-	for _, line := range hexFile.lines {
+	for _, line := range hexFile {
 		n := int(myparser.NumberOfBytes(line))
 		payload := myparser.Payload(line)
 
@@ -32,6 +35,7 @@ func sendOverUart(args []string) bool {
 				page = newPage()
 				posInPage = 0
 				pageCount++
+				progressBar.Update(progressBar.GetCurrent() + kPayloadInPageSize)
 			}
 		}
 	}
@@ -39,6 +43,7 @@ func sendOverUart(args []string) bool {
 	if posInPage != 0 {
 		send(&page, pageCount, crcTable)
 	}
+	progressBar.Finish()
 	fmt.Printf("\n\nDone. Wrote %d pages.\n", pageCount+1)
 	return true
 }

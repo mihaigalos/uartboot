@@ -75,7 +75,7 @@ git_repository(
 
 go_repository(
     name = "intel-hex-parser",
-    commit = "8900a6a955b3da19d8a6029be4ee4e103ea988e6",
+    commit = "49f76e59e665c478be0e5578ee9036a8e6bad9e7",
     importpath = "github.com/mihaigalos/intel-hex-parser",
 )
 
@@ -83,4 +83,10 @@ go_repository(
     name = "go-serial",
     commit = "d70dd9211da4fb7faaf61aa700215828010c68e3",
     importpath = "github.com/mihaigalos/go-serial",
+)
+
+go_repository(
+    name = "go-bar",
+    commit = "441e5080442f7d749bc26e61b9ff876ec64704d0",
+    importpath = "github.com/mihaigalos/go-bar",
 )
