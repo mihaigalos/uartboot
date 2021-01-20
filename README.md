@@ -7,4 +7,8 @@ An UART bootloader for Arduino/AVR.
 ** Warning **
 
 Using CuteCom on Linux for operations with the serial port.
-Need to cd to bazel-bin/ and run the executable with sudo from there, since `sudo bazel run //host:host demo.hex` would rebuild everything for `root`. 
+
+Example flashing of `demo.hex`:
+```
+sudo bazel-bin/host/host_/host /home/mihai/git/uartboot/host/demo.hex
+```
