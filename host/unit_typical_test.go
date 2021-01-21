@@ -3,7 +3,7 @@ package main
 import (
 	"testing"
 
-	myparser "github.com/mihaigalos/intel-hex-parser/parser"
+	myparser "github.com/mihaigalos/go-ihex/parser"
 )
 
 func TestIsFileValid_whenTypical(t *testing.T) {

@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	myparser "github.com/mihaigalos/intel-hex-parser/parser"
+	myparser "github.com/mihaigalos/go-ihex/parser"
 )
 
 func linesInFile(fileName string) []string {

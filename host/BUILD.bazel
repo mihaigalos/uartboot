@@ -13,8 +13,8 @@ go_library(
     visibility = ["//visibility:private"],
     deps = [
         "@go-bar//bar",
+        "@go-ihex//parser:parser_lib",
         "@go-serial//serial",
-        "@intel-hex-parser//parser:parser_lib",
     ],
 )
 

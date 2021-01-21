@@ -5,7 +5,7 @@ import (
 	"hash/crc32"
 
 	"github.com/mihaigalos/go-bar/bar"
-	myparser "github.com/mihaigalos/intel-hex-parser/parser"
+	myparser "github.com/mihaigalos/go-ihex/parser"
 )
 
 type Page [kPageSize]byte
