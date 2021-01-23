@@ -28,14 +28,14 @@ func (p FakeProgressHandler) Update(int) {
 func (p FakeProgressHandler) Finish() {
 }
 func TestSendWorks_whenTypical(t *testing.T) {
-	expected := true
+	expected := 2
 	args := []string{"demo.hex"}
 	var progressHandler FakeProgressHandler
 
 	actual := sendOverUart(sendMock, progressHandler, args)
 
 	if actual != expected {
-		t.Errorf("No Match: %b != %b", actual, expected)
+		t.Errorf("No match in number of pages written: %d != %d", actual, expected)
 	}
 }
 

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"hash/crc32"
 
 	myparser "github.com/mihaigalos/go-ihex/parser"
@@ -24,7 +23,7 @@ func doSend(page *Page, pageCount int, crcTable *crc32.Table, sendHandler SendHa
 	progressHandler.Update(newProgress)
 }
 
-func sendOverUart(sendHandler SendHandler, progressHandler ProgressHandler, args []string) bool {
+func sendOverUart(sendHandler SendHandler, progressHandler ProgressHandler, args []string) int {
 
 	hexFile := NewHexFile(args[0])
 	progressHandler.New(0, myparser.TotalNumberOfBytes(hexFile))
@@ -56,8 +55,9 @@ func sendOverUart(sendHandler SendHandler, progressHandler ProgressHandler, args
 	if posInPage != 0 {
 		newProgress := posInPage + pageCount*kPayloadInPageSize
 		doSend(&page, pageCount, crcTable, sendHandler, progressHandler, newProgress)
+		pageCount++
 	}
 	progressHandler.Finish()
-	fmt.Printf("\n\nDone. Wrote %d pages.\n", pageCount+1)
-	return true
+
+	return pageCount
 }

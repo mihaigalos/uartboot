@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/mihaigalos/go-bar/bar"
@@ -25,5 +26,6 @@ func (p ProgressHandlerImpl) Finish() {
 func main() {
 	var progressHandler ProgressHandlerImpl
 	argsWithoutProg := os.Args[1:]
-	sendOverUart(send, progressHandler, argsWithoutProg)
+	pageCount := sendOverUart(send, progressHandler, argsWithoutProg)
+	fmt.Printf("\n\nDone. Wrote %d pages.\n", pageCount+1)
 }
