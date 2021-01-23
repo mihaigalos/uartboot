@@ -28,7 +28,7 @@ func serializePageToStdout(page *Page) {
 	}
 }
 
-func serializePageToUart(page *Page) {
+func serializePageToUsb(page *Page) {
 	options := serial.OpenOptions{
 		PortName:        "/dev/ttyUSB0",
 		BaudRate:        38400,
@@ -50,7 +50,7 @@ func serializePageToUart(page *Page) {
 			fmt.Printf("Acknowledged.")
 			break
 		} else {
-			fmt.Printf("Error: received 0x%X.", TECommunicationResult(buf[0]))
+			fmt.Printf("\n[%d] Error: received 0x%02X, expected 0x%02X (TECommunicationResult::Ok).", i, TECommunicationResult(buf[0]), Ok)
 		}
 	}
 
@@ -59,8 +59,8 @@ func serializePageToUart(page *Page) {
 
 func send(page *Page, pageCount int, crcTable *crc32.Table, serializer string) {
 
-	if "serializePageToUart" == serializer {
-		serializePageToUart(page)
+	if "serializePageToUsb" == serializer {
+		serializePageToUsb(page)
 	} else if "serializePageToStdout" == serializer {
 		serializePageToStdout(page)
 	}

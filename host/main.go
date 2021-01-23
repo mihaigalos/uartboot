@@ -24,14 +24,20 @@ func (p ProgressHandlerImpl) Finish() {
 	progressBar.Finish()
 }
 
-type SendHandlerImpl struct{}
+type SendHandlerStdOutImpl struct{}
 
-func (s SendHandlerImpl) send(page *Page, pageCount int, crcTable *crc32.Table) {
+func (s SendHandlerStdOutImpl) send(page *Page, pageCount int, crcTable *crc32.Table) {
 	send(page, pageCount, crcTable, "serializePageToStdout")
+}
+
+type SendHandlerUsbImpl struct{}
+
+func (s SendHandlerUsbImpl) send(page *Page, pageCount int, crcTable *crc32.Table) {
+	send(page, pageCount, crcTable, "serializePageToUsb")
 }
 
 func main() {
 	argsWithoutProg := os.Args[1:]
-	pageCount := sendOverUart(SendHandlerImpl{}, ProgressHandlerImpl{}, argsWithoutProg)
+	pageCount := sendOverUart(SendHandlerStdOutImpl{}, ProgressHandlerImpl{}, argsWithoutProg)
 	fmt.Printf("\n\nDone. Wrote %d pages.\n", pageCount+1)
 }
