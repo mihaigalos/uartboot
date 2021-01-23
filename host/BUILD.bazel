@@ -6,7 +6,6 @@ go_library(
         "file.go",
         "io.go",
         "logic.go",
-        "main.go",
         "page.go",
     ],
     importpath = "github.com/mihaigalos/uartboot/host",
@@ -20,6 +19,9 @@ go_library(
 
 go_binary(
     name = "host",
+    srcs = [
+        "main.go",
+    ],
     embed = [":host_lib"],
     visibility = ["//visibility:public"],
 )

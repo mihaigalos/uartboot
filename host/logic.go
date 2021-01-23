@@ -4,27 +4,30 @@ import (
 	"fmt"
 	"hash/crc32"
 
-	"github.com/mihaigalos/go-bar/bar"
 	myparser "github.com/mihaigalos/go-ihex/parser"
 )
 
 type Page [kPageSize]byte
 
 type SendHandler func(page *Page, pageCount int, crcTable *crc32.Table)
+type ProgressHandler interface {
+	New(begin int, end int)
+	Update(newProgress int)
+	Finish()
+}
 
-func doSend(page *Page, pageCount int, crcTable *crc32.Table, sendHandler SendHandler, progressBar *bar.Bar, newProgress int) {
+func doSend(page *Page, pageCount int, crcTable *crc32.Table, sendHandler SendHandler, progressHandler ProgressHandler, newProgress int) {
 	appendDestination(page, pageCount)
 	appendCRC32(page, crcTable)
 	sendHandler(page, pageCount, crcTable)
 
-	progressBar.Update(newProgress)
+	progressHandler.Update(newProgress)
 }
 
-func sendOverUart(sendHandler SendHandler, args []string) bool {
+func sendOverUart(sendHandler SendHandler, progressHandler ProgressHandler, args []string) bool {
 
 	hexFile := NewHexFile(args[0])
-	var progressBar bar.Bar
-	progressBar.New(0, myparser.TotalNumberOfBytes(hexFile))
+	progressHandler.New(0, myparser.TotalNumberOfBytes(hexFile))
 
 	page := newPage()
 	posInPage := 0
@@ -42,7 +45,7 @@ func sendOverUart(sendHandler SendHandler, args []string) bool {
 
 			if posInPage == kPayloadInPageSize {
 				newProgress := posInPage + pageCount*kPayloadInPageSize
-				doSend(&page, pageCount, crcTable, sendHandler, &progressBar, newProgress)
+				doSend(&page, pageCount, crcTable, sendHandler, progressHandler, newProgress)
 				page = newPage()
 				posInPage = 0
 				pageCount++
@@ -52,9 +55,9 @@ func sendOverUart(sendHandler SendHandler, args []string) bool {
 
 	if posInPage != 0 {
 		newProgress := posInPage + pageCount*kPayloadInPageSize
-		doSend(&page, pageCount, crcTable, sendHandler, &progressBar, newProgress)
+		doSend(&page, pageCount, crcTable, sendHandler, progressHandler, newProgress)
 	}
-	progressBar.Finish()
+	progressHandler.Finish()
 	fmt.Printf("\n\nDone. Wrote %d pages.\n", pageCount+1)
 	return true
 }

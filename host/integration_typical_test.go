@@ -17,12 +17,22 @@ func sendMock(page *Page, pageCount int, crcTable *crc32.Table) {
 	}
 }
 
+type ProgressHandlerTest int
+
+func (p ProgressHandlerTest) New(int, int) {
+}
+
+func (p ProgressHandlerTest) Update(int) {
+}
+
+func (p ProgressHandlerTest) Finish() {
+}
 func TestSendWorks_whenTypical(t *testing.T) {
 	expected := true
-
 	args := []string{"demo.hex"}
+	var progressHandler ProgressHandlerTest
 
-	actual := sendOverUart(sendMock, args)
+	actual := sendOverUart(sendMock, progressHandler, args)
 
 	if actual != expected {
 		t.Errorf("No Match: %b != %b", actual, expected)
@@ -50,10 +60,10 @@ func TestSendCorrect_whenTypical(t *testing.T) {
 		0x84, 0xEF, 0x91, 0xE0, 0x0E, 0x94, 0x57, 0x00, 0x18, 0xB8, 0x15, 0xB8, 0x1B, 0xB8, 0x84, 0xEF,
 		0x91, 0xE0, 0x0E, 0x94, 0x57, 0x00, 0xF0, 0xCF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 		0x00, 0x80, 0x35, 0xD8, 0xED, 0xF5}
-
 	args := []string{"demo.hex"}
+	var progressHandler ProgressHandlerTest
 
-	sendOverUart(sendMock, args)
+	sendOverUart(sendMock, progressHandler , args)
 
 	for i,e := range expected{
 		actual := sendBuffer[i]

@@ -6,6 +6,17 @@ import (
 	myparser "github.com/mihaigalos/go-ihex/parser"
 )
 
+type ProgressHandlerTest int
+
+func (p ProgressHandlerTest) New(int, int) {
+}
+
+func (p ProgressHandlerTest) Update(int) {
+}
+
+func (p ProgressHandlerTest) Finish() {
+}
+
 func TestIsFileValid_whenTypical(t *testing.T) {
 	expected := true
 
