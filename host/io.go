@@ -8,6 +8,16 @@ import (
 	"github.com/mihaigalos/go-serial/serial"
 )
 
+const kMaxTriesWithCommunicationFailure = 3
+
+type TECommunicationResult int
+
+const (
+	Invalid TECommunicationResult = iota
+	Ok
+	CRCMismatch
+)
+
 func serializePageToStdout(page *Page) {
 	fmt.Println("\n")
 	for i := 0; i < kPageSize; i++ {
@@ -32,14 +42,25 @@ func serializePageToUart(page *Page) {
 		log.Fatalf("serial.Open: %v", err)
 	}
 
-	_, err = port.Write(pageToByteArray(page))
+	buf := make([]byte, 1)
+	for i := 0; i < kMaxTriesWithCommunicationFailure; i++ {
+		_, err = port.Write(pageToByteArray(page))
+		_, err = port.Read(buf)
+		if TECommunicationResult(buf[0]) == Ok {
+			break
+		}
+	}
 
 	port.Close()
 }
 
-func send(page *Page, pageCount int, crcTable *crc32.Table) {
-	// serializePageToUart(page)
+func send(page *Page, pageCount int, crcTable *crc32.Table, serializer string) {
 
-	serializePageToStdout(page)
+	if "serializePageToUart" == serializer {
+		serializePageToUart(page)
+	} else if "serializePageToStdout" == serializer {
+		serializePageToStdout(page)
+	}
+
 	fmt.Println("")
 }

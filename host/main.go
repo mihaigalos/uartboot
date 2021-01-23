@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"hash/crc32"
 	"os"
 
 	"github.com/mihaigalos/go-bar/bar"
@@ -23,9 +24,17 @@ func (p ProgressHandlerImpl) Finish() {
 	progressBar.Finish()
 }
 
+type SendHandlerImpl int
+
+func (s SendHandlerImpl) send(page *Page, pageCount int, crcTable *crc32.Table) {
+	send(page, pageCount, crcTable, "serializePageToStdout")
+}
+
 func main() {
 	var progressHandler ProgressHandlerImpl
+	var sendHandler SendHandlerImpl
+
 	argsWithoutProg := os.Args[1:]
-	pageCount := sendOverUart(send, progressHandler, argsWithoutProg)
+	pageCount := sendOverUart(sendHandler, progressHandler, argsWithoutProg)
 	fmt.Printf("\n\nDone. Wrote %d pages.\n", pageCount+1)
 }

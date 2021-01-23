@@ -17,6 +17,13 @@ func sendMock(page *Page, pageCount int, crcTable *crc32.Table) {
 	}
 }
 
+
+type SendHandlerImpl int
+
+func (s SendHandlerImpl) send(page *Page, pageCount int, crcTable *crc32.Table) {
+	sendMock(page, pageCount, crcTable)
+}
+
 type FakeProgressHandler int
 
 func (p FakeProgressHandler) New(int, int) {
@@ -31,8 +38,9 @@ func TestSendWorks_whenTypical(t *testing.T) {
 	expected := 2
 	args := []string{"demo.hex"}
 	var progressHandler FakeProgressHandler
+	var sendHandler SendHandlerImpl
 
-	actual := sendOverUart(sendMock, progressHandler, args)
+	actual := sendOverUart(sendHandler, progressHandler, args)
 
 	if actual != expected {
 		t.Errorf("No match in number of pages written: %d != %d", actual, expected)
@@ -62,8 +70,9 @@ func TestSendCorrect_whenTypical(t *testing.T) {
 		0x00, 0x80, 0x35, 0xD8, 0xED, 0xF5}
 	args := []string{"demo.hex"}
 	var progressHandler FakeProgressHandler
+	var sendHandler SendHandlerImpl
 
-	sendOverUart(sendMock, progressHandler , args)
+	sendOverUart(sendHandler, progressHandler , args)
 
 	for i,e := range expected{
 		actual := sendBuffer[i]

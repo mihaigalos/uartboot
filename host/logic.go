@@ -8,7 +8,10 @@ import (
 
 type Page [kPageSize]byte
 
-type SendHandler func(page *Page, pageCount int, crcTable *crc32.Table)
+type SendHandler interface {
+	send(page *Page, pageCount int, crcTable *crc32.Table)
+}
+
 type ProgressHandler interface {
 	New(begin int, end int)
 	Update(newProgress int)
@@ -18,7 +21,7 @@ type ProgressHandler interface {
 func doSend(page *Page, pageCount int, crcTable *crc32.Table, sendHandler SendHandler, progressHandler ProgressHandler, newProgress int) {
 	appendDestination(page, pageCount)
 	appendCRC32(page, crcTable)
-	sendHandler(page, pageCount, crcTable)
+	sendHandler.send(page, pageCount, crcTable)
 
 	progressHandler.Update(newProgress)
 }
