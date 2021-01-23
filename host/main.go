@@ -10,7 +10,7 @@ import (
 
 var progressBar bar.Bar
 
-type ProgressHandlerImpl int
+type ProgressHandlerImpl struct{}
 
 func (p ProgressHandlerImpl) New(begin int, end int) {
 	progressBar.New(begin, end)
@@ -24,7 +24,7 @@ func (p ProgressHandlerImpl) Finish() {
 	progressBar.Finish()
 }
 
-type SendHandlerImpl int
+type SendHandlerImpl struct{}
 
 func (s SendHandlerImpl) send(page *Page, pageCount int, crcTable *crc32.Table) {
 	send(page, pageCount, crcTable, "serializePageToStdout")

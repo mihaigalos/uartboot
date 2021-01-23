@@ -18,13 +18,13 @@ func sendMock(page *Page, pageCount int, crcTable *crc32.Table) {
 }
 
 
-type SendHandlerImpl int
+type SendHandlerImpl struct{}
 
 func (s SendHandlerImpl) send(page *Page, pageCount int, crcTable *crc32.Table) {
 	sendMock(page, pageCount, crcTable)
 }
 
-type FakeProgressHandler int
+type FakeProgressHandler struct{}
 
 func (p FakeProgressHandler) New(int, int) {
 }

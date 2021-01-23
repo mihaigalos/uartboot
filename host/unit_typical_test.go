@@ -6,7 +6,7 @@ import (
 	myparser "github.com/mihaigalos/go-ihex/parser"
 )
 
-type FakeProgressHandler int
+type FakeProgressHandler struct{}
 
 func (p FakeProgressHandler) New(int, int) {
 }
