@@ -17,20 +17,20 @@ func sendMock(page *Page, pageCount int, crcTable *crc32.Table) {
 	}
 }
 
-type ProgressHandlerTest int
+type FakeProgressHandler int
 
-func (p ProgressHandlerTest) New(int, int) {
+func (p FakeProgressHandler) New(int, int) {
 }
 
-func (p ProgressHandlerTest) Update(int) {
+func (p FakeProgressHandler) Update(int) {
 }
 
-func (p ProgressHandlerTest) Finish() {
+func (p FakeProgressHandler) Finish() {
 }
 func TestSendWorks_whenTypical(t *testing.T) {
 	expected := true
 	args := []string{"demo.hex"}
-	var progressHandler ProgressHandlerTest
+	var progressHandler FakeProgressHandler
 
 	actual := sendOverUart(sendMock, progressHandler, args)
 
@@ -61,7 +61,7 @@ func TestSendCorrect_whenTypical(t *testing.T) {
 		0x91, 0xE0, 0x0E, 0x94, 0x57, 0x00, 0xF0, 0xCF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 		0x00, 0x80, 0x35, 0xD8, 0xED, 0xF5}
 	args := []string{"demo.hex"}
-	var progressHandler ProgressHandlerTest
+	var progressHandler FakeProgressHandler
 
 	sendOverUart(sendMock, progressHandler , args)
 
