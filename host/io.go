@@ -47,7 +47,10 @@ func serializePageToUart(page *Page) {
 		_, err = port.Write(pageToByteArray(page))
 		_, err = port.Read(buf)
 		if TECommunicationResult(buf[0]) == Ok {
+			fmt.Printf("Acknowledged.")
 			break
+		} else {
+			fmt.Printf("Error: received 0x%X.", TECommunicationResult(buf[0]))
 		}
 	}
 
