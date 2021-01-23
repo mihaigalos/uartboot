@@ -25,9 +25,18 @@ go_binary(
 )
 
 go_test(
-    name = "unit_test",
+    name = "unit_tests",
     srcs = [
         "unit_typical_test.go",
+    ],
+    data = ["demo.hex"],
+    embed = [":host_lib"],
+)
+
+go_test(
+    name = "integration_tests",
+    srcs = [
+        "integration_typical_test.go",
     ],
     data = ["demo.hex"],
     embed = [":host_lib"],

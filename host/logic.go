@@ -10,7 +10,17 @@ import (
 
 type Page [kPageSize]byte
 
-func sendOverUart(args []string) bool {
+type SendHandler func(page *Page, pageCount int, crcTable *crc32.Table)
+
+func doSend(page *Page, pageCount int, crcTable *crc32.Table, sendHandler SendHandler, progressBar *bar.Bar, newProgress int) {
+	appendDestination(page, pageCount)
+	appendCRC32(page, crcTable)
+	sendHandler(page, pageCount, crcTable)
+
+	progressBar.Update(newProgress)
+}
+
+func sendOverUart(sendHandler SendHandler, args []string) bool {
 
 	hexFile := NewHexFile(args[0])
 	var progressBar bar.Bar
@@ -31,17 +41,18 @@ func sendOverUart(args []string) bool {
 			posInPage++
 
 			if posInPage == kPayloadInPageSize {
-				send(&page, pageCount, crcTable)
+				newProgress := posInPage + pageCount*kPayloadInPageSize
+				doSend(&page, pageCount, crcTable, sendHandler, &progressBar, newProgress)
 				page = newPage()
 				posInPage = 0
 				pageCount++
-				progressBar.Update(progressBar.GetCurrent() + kPayloadInPageSize)
 			}
 		}
 	}
 
 	if posInPage != 0 {
-		send(&page, pageCount, crcTable)
+		newProgress := posInPage + pageCount*kPayloadInPageSize
+		doSend(&page, pageCount, crcTable, sendHandler, &progressBar, newProgress)
 	}
 	progressBar.Finish()
 	fmt.Printf("\n\nDone. Wrote %d pages.\n", pageCount+1)
