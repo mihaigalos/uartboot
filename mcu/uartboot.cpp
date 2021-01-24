@@ -92,12 +92,12 @@ const TECommunicationResult UartBoot::safeReadPageWithMetadataFromHost(Page &pag
 const TEFlashResult UartBoot::main() const
 {
     TEFlashResult result{TEFlashResult::Invalid};
-    eraseApplication();
 
     Metadata metadata{};
 
     if (TECommunicationResult::Ok == safeReadMetadata(metadata) && isReflashNecessary(metadata.structure.application_timestamp))
     {
+        eraseApplication();
         for (uint16_t i = 0; i < metadata.structure.length; ++i)
         {
             result = TEFlashResult::Ok;
