@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"hash/crc32"
 	"log"
+	"time"
 
 	"github.com/mihaigalos/go-serial/serial"
 )
 
 const kMaxTriesWithCommunicationFailure = 3
+const kWaitAfterWritePageMs = 10
 
 type TECommunicationResult int
 
@@ -45,6 +47,7 @@ func serializePageToUsb(page *Page) {
 	buf := make([]byte, 1)
 	for i := 0; i < kMaxTriesWithCommunicationFailure; i++ {
 		_, err = port.Write(pageToByteArray(page))
+		time.Sleep(kWaitAfterWritePageMs * time.Millisecond)
 		_, err = port.Read(buf)
 		if TECommunicationResult(buf[0]) == Ok {
 			fmt.Printf("Acknowledged.")
