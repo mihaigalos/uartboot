@@ -26,7 +26,7 @@ func doSend(page *Page, pageCount int, crcTable *crc32.Table, sendHandler SendHa
 	progressHandler.Update(newProgress)
 }
 
-func sendOverUart(sendHandler SendHandler, progressHandler ProgressHandler, args []string) int {
+func run(sendHandler SendHandler, progressHandler ProgressHandler, args []string) int {
 
 	hexFile := NewHexFile(args[0])
 	progressHandler.New(0, myparser.TotalNumberOfBytes(hexFile))

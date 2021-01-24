@@ -38,6 +38,6 @@ func (s SendHandlerUsbImpl) send(page *Page, pageCount int, crcTable *crc32.Tabl
 
 func main() {
 	argsWithoutProg := os.Args[1:]
-	pageCount := sendOverUart(SendHandlerStdOutImpl{}, ProgressHandlerImpl{}, argsWithoutProg)
+	pageCount := run(SendHandlerStdOutImpl{}, ProgressHandlerImpl{}, argsWithoutProg)
 	fmt.Printf("\n\nDone. Wrote %d pages.\n", pageCount+1)
 }

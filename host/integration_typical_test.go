@@ -38,7 +38,7 @@ func TestSendWorks_whenTypical(t *testing.T) {
 	expected := 2
 	args := []string{"demo.hex"}
 
-	actual := sendOverUart(SendHandlerImpl{}, FakeProgressHandler{}, args)
+	actual := run(SendHandlerImpl{}, FakeProgressHandler{}, args)
 
 	if actual != expected {
 		t.Errorf("No match in number of pages written: %d != %d", actual, expected)
@@ -68,7 +68,7 @@ func TestSendCorrect_whenTypical(t *testing.T) {
 		0x00, 0x80, 0x35, 0xD8, 0xED, 0xF5}
 	args := []string{"demo.hex"}
 
-	sendOverUart(SendHandlerImpl{}, FakeProgressHandler{} , args)
+	run(SendHandlerImpl{}, FakeProgressHandler{} , args)
 
 	for i,e := range expected{
 		actual := sendBuffer[i]
