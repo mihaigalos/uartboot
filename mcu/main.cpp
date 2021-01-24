@@ -2,5 +2,7 @@
 
 int main()
 {
+    initCommon();
+    LED_ON();
     UartBoot{}.main();
 }

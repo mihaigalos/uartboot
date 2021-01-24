@@ -10,12 +10,12 @@
 #include <util/delay.h>
 #include "software_uart/software_uart.h"
 #define virtual__ virtual //needed for mocking
-
-#else // TESTING
+#else                     // TESTING
 #include "testing_helper.h"
 #include <avr-bootloader-common/crc32.h>
 #define virtual__ // no need for virtual functions
-#endif            // TESTING
+#define LED_TOGGLE()
+#endif // TESTING
 
 #include <stdint.h>
 

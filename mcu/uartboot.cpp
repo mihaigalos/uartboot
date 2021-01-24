@@ -111,6 +111,7 @@ const TEFlashResult UartBoot::main() const
                 result = TEFlashResult::FlashFailed;
                 break;
             }
+            LED_TOGGLE();
         }
         if (TEFlashResult::Ok == result)
         {
