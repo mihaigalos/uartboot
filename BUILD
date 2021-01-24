@@ -2,6 +2,7 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 load("@avr_tools//tools/avr:hex.bzl", "eeprom", "hex", "listing")
 load("@bazel_gazelle//:def.bzl", "gazelle")
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
+load("@io_bazel_rules_go//go:def.bzl", "go_test")
 
 BOOTLOADER_START_ADDRESS = "0x7800"
 
@@ -112,8 +113,8 @@ cc_binary(
             "mcu/uartboot.h",
             "mcu/config.h",
             "mcu/testing_helper.h",
-            "test/uartboot_testing_implementations.cpp",
-            "test/component/" + component_name + ".cpp",
+            "test/mcu/uartboot_testing_implementations.cpp",
+            "test/mcu/component/" + component_name + ".cpp",
         ]),
         copts = DEFAULT_TEST_COMPILE_OPTIONS,
         includes = [
@@ -126,8 +127,8 @@ cc_binary(
         ],
     )
     for component_name in [
-        file_name.replace("test/component/", "").replace(".cpp", "")
-        for file_name in glob(["test/component/**/*.cpp"])
+        file_name.replace("test/mcu/component/", "").replace(".cpp", "")
+        for file_name in glob(["test/mcu/component/**/*.cpp"])
     ]
 ]
 
@@ -139,8 +140,8 @@ cc_binary(
             "mcu/uartboot.h",
             "mcu/config.h",
             "mcu/testing_helper.h",
-            "test/uartboot_testing_implementations.cpp",
-            "test/unit/" + unit_name + ".cpp",
+            "test/mcu/uartboot_testing_implementations.cpp",
+            "test/mcu/unit/" + unit_name + ".cpp",
         ]),
         copts = DEFAULT_TEST_COMPILE_OPTIONS,
         includes = [
@@ -153,8 +154,8 @@ cc_binary(
         ],
     )
     for unit_name in [
-        file_name.replace("test/unit/", "").replace(".cpp", "")
-        for file_name in glob(["test/unit/**/*.cpp"])
+        file_name.replace("test/mcu/unit/", "").replace(".cpp", "")
+        for file_name in glob(["test/mcu/unit/**/*.cpp"])
     ]
 ]
 
@@ -166,8 +167,8 @@ cc_binary(
             "mcu/uartboot.h",
             "mcu/config.h",
             "mcu/testing_helper.h",
-            "test/uartboot_testing_implementations.cpp",
-            "test/integration/" + integration_name + ".cpp",
+            "test/mcu/uartboot_testing_implementations.cpp",
+            "test/mcu/integration/" + integration_name + ".cpp",
         ]),
         copts = DEFAULT_TEST_COMPILE_OPTIONS,
         includes = [
@@ -180,8 +181,8 @@ cc_binary(
         ],
     )
     for integration_name in [
-        file_name.replace("test/integration/", "").replace(".cpp", "")
-        for file_name in glob(["test/integration/**/*.cpp"])
+        file_name.replace("test/mcu/integration/", "").replace(".cpp", "")
+        for file_name in glob(["test/mcu/integration/**/*.cpp"])
     ]
 ]
 
@@ -209,4 +210,22 @@ gazelle(
     name = "gazelle",
     command = "fix",
     prefix = "github.com/mihaigalos/uartboot",
+)
+
+go_test(
+    name = "unit_tests",
+    srcs = [
+        "test/host/unit_typical_test.go",
+    ],
+    data = ["test/host/demo.hex"],
+    embed = ["//host:host_lib"],
+)
+
+go_test(
+    name = "integration_tests",
+    srcs = [
+        "test/host/integration_typical_test.go",
+    ],
+    data = ["test/host/demo.hex"],
+    embed = ["//host:host_lib"],
 )

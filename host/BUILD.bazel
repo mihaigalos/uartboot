@@ -1,4 +1,4 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 
 go_library(
     name = "host_lib",
@@ -9,7 +9,7 @@ go_library(
         "page.go",
     ],
     importpath = "github.com/mihaigalos/uartboot/host",
-    visibility = ["//visibility:private"],
+    visibility = ["//visibility:public"],
     deps = [
         "@go-bar//bar",
         "@go-ihex//parser:parser_lib",
@@ -24,22 +24,4 @@ go_binary(
     ],
     embed = [":host_lib"],
     visibility = ["//visibility:public"],
-)
-
-go_test(
-    name = "unit_tests",
-    srcs = [
-        "unit_typical_test.go",
-    ],
-    data = ["demo.hex"],
-    embed = [":host_lib"],
-)
-
-go_test(
-    name = "integration_tests",
-    srcs = [
-        "integration_typical_test.go",
-    ],
-    data = ["demo.hex"],
-    embed = [":host_lib"],
 )

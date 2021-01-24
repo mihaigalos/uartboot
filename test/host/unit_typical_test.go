@@ -20,7 +20,7 @@ func (p FakeProgressHandler) Finish() {
 func TestIsFileValid_whenTypical(t *testing.T) {
 	expected := true
 
-	file := linesInFile("demo.hex")
+	file := linesInFile("test/host/demo.hex")
 
 	actual := myparser.IsFileValid(file)
 
