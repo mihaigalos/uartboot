@@ -2,6 +2,9 @@
 
 #include <stdint.h>
 
+#define LED_PORT_NAME B
+#define LED_PIN 0
+
 #ifndef TESTING
 #include <avr-bootloader-common/all.h>
 #include <util/delay.h>
@@ -21,6 +24,3 @@
 #else
 #define PROGMEM
 #endif //__AVR__
-
-#define LED_PORT_NAME B
-#define LED_PIN 0

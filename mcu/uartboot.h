@@ -12,7 +12,7 @@ static constexpr uint8_t kPageSize{SPM_PAGESIZE};
 static constexpr uint8_t kDestinationAddressOffset{kPageSize};
 static constexpr uint8_t kCRC32Offset{kDestinationAddressOffset + kSizeOfDestinationAddress};
 
-static constexpr uint16_t kFlashSize{32 * 1024};
+static constexpr uint16_t kFlashSize{static_cast<uint16_t>(32) * static_cast<uint16_t>(1024)};
 static constexpr uint16_t kNumberOfFlashPages{kFlashSize / kPageSize};
 static constexpr uint8_t kInvalidValue{0xFF};
 
@@ -29,7 +29,9 @@ using FlashEmulator = MemoryEmulator;
 using EEPROMEmulator = MemoryEmulator;
 #endif // TESTING
 
+#ifdef TESTING
 #pragma pack(push, 1)
+#endif
 union Metadata {
     Metadata() {}
     struct StructureType
@@ -46,13 +48,16 @@ union Metadata {
 
     uint8_t(byte_array)[sizeof(StructureType)];
 };
+#ifdef TESTING
 #pragma pack(pop)
-
+#endif
 static constexpr uint8_t kMetadataSize{sizeof(Metadata)};
 static_assert(kMetadataSize == sizeof(Metadata::byte_array), "kMetadataSize and byte_array size do not match!");
 static constexpr uint8_t kCRC32OffsetInMetadata{30};
 
+#ifdef TESTING
 #pragma pack(push, 1)
+#endif
 union Page {
     Page() = default;
     struct StructureType
@@ -64,8 +69,9 @@ union Page {
     } structure;
     uint8_t(byte_array)[sizeof(StructureType)];
 };
+#ifdef TESTING
 #pragma pack(pop)
-
+#endif
 static_assert(kPageWithCrcAndDestinationSize == sizeof(Page::byte_array), "kPageWithCrcAndDestinationSize and byte_array size do not match!");
 
 enum class TECommunicationResult

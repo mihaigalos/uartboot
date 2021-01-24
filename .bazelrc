@@ -6,6 +6,7 @@ build --build_tag_filters=-mcu_binary_file --define MCU=none
 build:328p --crosstool_top=@avr_tools//tools/avr:toolchain_avr --distinct_host_configuration=false
 build:328p --cpu=avr
 build:328p --define MCU=atmega328p
+build:328p --build_tag_filters=mcu_binary_file
 
 build:trinket --crosstool_top=@avr_tools//tools/avr:toolchain_avr --distinct_host_configuration=false
 build:trinket --cpu=avr
