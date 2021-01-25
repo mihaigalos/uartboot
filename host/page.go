@@ -36,8 +36,8 @@ func pageToByteArray(page *Page) []byte {
 
 func appendCRC32(page *Page, crcTable *crc32.Table) {
 
-	byteArray := make([]byte, kPayloadInPageSize)
-	for i := 0; i < kPayloadInPageSize; i++ {
+	byteArray := make([]byte, kPayloadInPageSize+kDestinationSize)
+	for i := 0; i < kPayloadInPageSize+kDestinationSize; i++ {
 		byteArray[i] = byte(page[i])
 	}
 	computedCrc32 := crc32.Checksum(byteArray, crcTable)
