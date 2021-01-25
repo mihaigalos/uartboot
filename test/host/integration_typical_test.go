@@ -1,7 +1,6 @@
 package main
 
 import (
-	"hash/crc32"
 	"testing"
 )
 
@@ -10,7 +9,7 @@ const kBufferSize = 100_000
 var sendBuffer [kBufferSize]byte
 var posInBuffer int
 
-func sendMock(page *Page, pageCount int, crcTable *crc32.Table) {
+func sendMock(page *Page, pageCount int) {
 	for i := 0; i < kPageSize; i++ {
 		sendBuffer[posInBuffer] = page[i]
 		posInBuffer++
@@ -20,8 +19,8 @@ func sendMock(page *Page, pageCount int, crcTable *crc32.Table) {
 
 type SendHandlerImpl struct{}
 
-func (s SendHandlerImpl) send(page *Page, pageCount int, crcTable *crc32.Table) {
-	sendMock(page, pageCount, crcTable)
+func (s SendHandlerImpl) send(page *Page, pageCount int) {
+	sendMock(page, pageCount)
 }
 
 type FakeProgressHandler struct{}

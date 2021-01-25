@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"hash/crc32"
 	"os"
 
 	"github.com/mihaigalos/go-bar/bar"
@@ -26,14 +25,14 @@ func (p ProgressHandlerImpl) Finish() {
 
 type SendHandlerStdOutImpl struct{}
 
-func (s SendHandlerStdOutImpl) send(page *Page, pageCount int, crcTable *crc32.Table) {
-	send(page, pageCount, crcTable, "serializePageToStdout")
+func (s SendHandlerStdOutImpl) send(page *Page, pageCount int) {
+	send(page, pageCount, "serializePageToStdout")
 }
 
 type SendHandlerUsbImpl struct{}
 
-func (s SendHandlerUsbImpl) send(page *Page, pageCount int, crcTable *crc32.Table) {
-	send(page, pageCount, crcTable, "serializePageToUsb")
+func (s SendHandlerUsbImpl) send(page *Page, pageCount int) {
+	send(page, pageCount, "serializePageToUsb")
 }
 
 func main() {

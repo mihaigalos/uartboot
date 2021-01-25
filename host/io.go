@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"hash/crc32"
 	"log"
 	"time"
 
@@ -60,7 +59,7 @@ func serializePageToUsb(page *Page) {
 	port.Close()
 }
 
-func send(page *Page, pageCount int, crcTable *crc32.Table, serializer string) {
+func send(page *Page, pageCount int, serializer string) {
 
 	if "serializePageToUsb" == serializer {
 		serializePageToUsb(page)
