@@ -5,18 +5,6 @@ UartBoot::UartBoot()
     init_table(&crc_table_[0]);
 }
 
-const bool UartBoot::isReflashNecessary(const uint32_t &application_timestamp) const
-{
-    const uint32_t current_application_timestamp =
-        readLatestApplicationTimestampFromInternalEeprom();
-
-    if (eeprom_not_programmed == current_application_timestamp)
-        return true;
-    if (application_timestamp > current_application_timestamp)
-        return true;
-    return false;
-}
-
 const bool UartBoot::isCrcOk(const void *in, const uint8_t length, const CRC32Type &expectedCrc) const
 {
     uint32_t crc{0};
@@ -95,7 +83,7 @@ const TEFlashResult UartBoot::main() const
 
     Metadata metadata{};
 
-    if (TECommunicationResult::Ok == safeReadMetadata(metadata) && isReflashNecessary(metadata.structure.application_timestamp))
+    if (TECommunicationResult::Ok == safeReadMetadata(metadata))
     {
         eraseApplication();
         for (uint16_t i = 0; i < metadata.structure.length; ++i)
@@ -112,10 +100,6 @@ const TEFlashResult UartBoot::main() const
                 break;
             }
             LED_TOGGLE();
-        }
-        if (TEFlashResult::Ok == result)
-        {
-            writeLatestApplicationTimestampToInternalEeprom(metadata.structure.application_timestamp);
         }
     }
     return result;

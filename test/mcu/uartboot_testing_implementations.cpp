@@ -27,14 +27,6 @@ const Metadata UartBoot::decodeMetadata(const uint8_t (&in)[kMetadataSize]) cons
     return *reinterpret_cast<const Metadata *>(in);
 }
 
-uint32_t UartBoot::readLatestApplicationTimestampFromInternalEeprom() const
-{
-    return 0xFFFFFFFF;
-}
-
-void UartBoot::writeLatestApplicationTimestampToInternalEeprom(const uint32_t latest_timestamp) const
-{
-}
 uint16_t UartBoot::readWordFromMetadata(const uint16_t address) const
 {
     return 0xFFFF;

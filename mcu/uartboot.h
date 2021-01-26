@@ -93,7 +93,6 @@ class UartBoot
 public:
     UartBoot();
     const TEFlashResult main() const;
-    const bool isReflashNecessary(const uint32_t &application_timestamp) const;
     virtual__ const bool isCrcOk(const void *in, const uint8_t length, const CRC32Type &expectedCrc) const;
     void writePageToFlash(const uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;
     const TECommunicationResult readMetadata(Metadata &metadata) const;
@@ -105,8 +104,6 @@ public:
     virtual void writePageBufferToFlash(const uint16_t address) const;
     virtual void writeToPageBuffer(const uint16_t address, const uint8_t *data) const;
     virtual void eraseApplication() const;
-    virtual uint32_t readLatestApplicationTimestampFromInternalEeprom() const;
-    virtual void writeLatestApplicationTimestampToInternalEeprom(const uint32_t latest_timestamp) const;
     virtual uint16_t readWordFromMetadata(uint16_t address) const;
     virtual uint8_t uart_read() const;
     virtual void uart_write(uint8_t value) const;

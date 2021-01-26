@@ -23,16 +23,6 @@ protected:
     UartBootMock sut_{};
 };
 
-TEST_F(Fixture, ReadLatestApplicationTimestampFromInternalEeprom_IncreasesCoverage)
-{
-    auto expected{0xFFFFFFFF};
-    auto actual{0};
-
-    actual = sut_.readLatestApplicationTimestampFromInternalEeprom();
-
-    ASSERT_EQ(actual, expected);
-}
-
 TEST_F(Fixture, ReadWordFromMetadata_IncreasesCoverage)
 {
     auto expected{0xFFFF};

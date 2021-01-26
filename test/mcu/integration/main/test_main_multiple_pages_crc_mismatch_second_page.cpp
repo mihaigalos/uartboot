@@ -14,7 +14,6 @@ using ::testing::Return;
 class UartBootMock : public UartBoot
 {
 public:
-    MOCK_METHOD(uint32_t, readLatestApplicationTimestampFromInternalEeprom, (), (const, override));
     MOCK_METHOD(uint8_t, uart_read, (), (const, override));
     MOCK_METHOD(void, writeToPageBuffer, (const uint16_t address, const uint8_t *data), (const, override));
 };
@@ -87,7 +86,6 @@ TEST_F(Fixture, MainSinglePageWriteOk_WhenTypical)
     Metadata in;
     EXPECT_CALL(sut_, uart_read())
         .WillRepeatedly(Invoke(onUartRead));
-    EXPECT_CALL(sut_, readLatestApplicationTimestampFromInternalEeprom()).WillOnce(Return(0xFFFFFFFF));
     EXPECT_CALL(sut_, writeToPageBuffer(_, _))
         .WillRepeatedly(Invoke([&](const uint16_t address, const uint8_t *data) { Fixture::onWriteToPageBuffer(address, data); }));
 
