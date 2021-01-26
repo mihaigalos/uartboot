@@ -113,5 +113,4 @@ public:
 #endif
 
 private:
-    // uint32_t crc_table_[crc_table_size];
 };
