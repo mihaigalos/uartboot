@@ -39,7 +39,7 @@ bool operator==(const Metadata &lhs, const Metadata &rhs)
 
     result &= lhs.structure.application_timestamp == rhs.structure.application_timestamp;
     result &= lhs.structure.writing_timestamp == rhs.structure.writing_timestamp;
-    result &= lhs.structure.crc32 == rhs.structure.crc32;
+    result &= lhs.structure.crc == rhs.structure.crc;
     result &= lhs.structure.length == rhs.structure.length;
 
     return result;
@@ -72,7 +72,7 @@ TEST_F(Fixture, IsDecodedMetadataOk_WhenTypical)
     expected.structure.application_timestamp = 0x12345678;
     expected.structure.writing_timestamp = 0xBBCCDDEE;
     expected.structure.length = 0x5678;
-    expected.structure.crc32 = 0xAABBCCDD;
+    expected.structure.crc = 0xAABB;
 
     uint8_t data_in_big_endian_format[kMetadataSize]{
         0x90, 0x78,
@@ -81,7 +81,7 @@ TEST_F(Fixture, IsDecodedMetadataOk_WhenTypical)
         0x78, 0x56, 0x34, 0x12,
         0xEE, 0xDD, 0xCC, 0xBB,
         0x78, 0x56,
-        0xDD, 0xCC, 0xBB, 0xAA};
+        0xBB, 0xAA};
 
     auto actual = sut_.decodeMetadata(data_in_big_endian_format);
 

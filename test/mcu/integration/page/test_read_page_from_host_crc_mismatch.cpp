@@ -25,10 +25,8 @@ public:
         data_[kDestinationAddressOffset + 0] = 0x00;
         data_[kDestinationAddressOffset + 1] = 0x00;
 
-        data_[kCRC32Offset + 0] = 0xAA;
-        data_[kCRC32Offset + 1] = 0x55;
-        data_[kCRC32Offset + 2] = 0xAA;
-        data_[kCRC32Offset + 3] = 0x55;
+        data_[kCRCOffset + 0] = 0xAA;
+        data_[kCRCOffset + 1] = 0x55;
     }
     static uint8_t onUartRead()
     {

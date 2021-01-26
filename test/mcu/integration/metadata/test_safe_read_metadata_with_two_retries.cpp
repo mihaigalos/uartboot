@@ -23,10 +23,8 @@ class Fixture : public ::testing::Test
 public:
     void SetUp() override
     {
-        data_[kCRC32OffsetInMetadata + 0] = 0xB6;
-        data_[kCRC32OffsetInMetadata + 1] = 0xFF;
-        data_[kCRC32OffsetInMetadata + 2] = 0x44;
-        data_[kCRC32OffsetInMetadata + 3] = 0x00;
+        data_[kCRCOffsetInMetadata + 0] = 0xC6;
+        data_[kCRCOffsetInMetadata + 1] = 0xAA;
     }
     static uint8_t onUartRead()
     {
@@ -44,7 +42,7 @@ public:
 
         if (retransmit_count_ == kMaxTriesWithCommunicationFailure - 1)
         {
-            data_[kCRC32OffsetInMetadata + 3] = 0x1A;
+            data_[kCRCOffsetInMetadata + 1] = 0x0D;
         }
 
         return result;

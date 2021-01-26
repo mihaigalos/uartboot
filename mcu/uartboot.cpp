@@ -1,14 +1,13 @@
 #include "uartboot.h"
-
-UartBoot::UartBoot()
+#include <iostream>
+const bool UartBoot::isCrcOk(const uint8_t *in, const uint8_t length, const CRCType &expectedCrc) const
 {
-    init_table(&crc_table_[0]);
-}
-
-const bool UartBoot::isCrcOk(const void *in, const uint8_t length, const CRC32Type &expectedCrc) const
-{
-    uint32_t crc{0};
-    crc32(in, length, &crc_table_[0], &crc);
+    uint16_t crc{0x00};
+    for (uint8_t i = 0; i < length; ++i)
+    {
+        crc += in[i];
+    }
+    std::cout << "computed crc: 0x" << std::hex << crc << std::endl;
     return crc == expectedCrc;
 }
 
@@ -28,7 +27,7 @@ const TECommunicationResult UartBoot::readMetadata(Metadata &metadata) const
     {
         metadata.byte_array[i] = uart_read();
     }
-    if (!isCrcOk(metadata.byte_array, sizeof(Metadata) - kSizeOfCRC32, metadata.structure.crc32))
+    if (!isCrcOk(metadata.byte_array, sizeof(Metadata) - kSizeOfCRC32, metadata.structure.crc))
     {
         return TECommunicationResult::CRCMismatch;
     }
@@ -56,7 +55,7 @@ const TECommunicationResult UartBoot::readPageWithMetadataFromHost(Page &page) c
         page.byte_array[readBytes] = uart_read();
     }
 
-    if (!isCrcOk(page.byte_array, kPageSize + kSizeOfDestinationAddress, page.structure.crc32))
+    if (!isCrcOk(page.byte_array, kPageSize + kSizeOfDestinationAddress, page.structure.crc))
     {
         return TECommunicationResult::CRCMismatch;
     }

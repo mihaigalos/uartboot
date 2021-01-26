@@ -2,15 +2,15 @@
 
 #include "config.h"
 
-using CRC32Type = uint32_t;
+using CRCType = uint16_t;
 using DestinationAddreessType = uint16_t;
 
-static constexpr uint8_t kSizeOfCRC32{sizeof(CRC32Type)};
+static constexpr uint8_t kSizeOfCRC32{sizeof(CRCType)};
 static constexpr uint16_t kSizeOfDestinationAddress{sizeof(DestinationAddreessType)};
 
 static constexpr uint8_t kPageSize{SPM_PAGESIZE};
 static constexpr uint8_t kDestinationAddressOffset{kPageSize};
-static constexpr uint8_t kCRC32Offset{kDestinationAddressOffset + kSizeOfDestinationAddress};
+static constexpr uint8_t kCRCOffset{kDestinationAddressOffset + kSizeOfDestinationAddress};
 
 static constexpr uint16_t kFlashSize{static_cast<uint16_t>(32) * static_cast<uint16_t>(1024)};
 static constexpr uint16_t kNumberOfFlashPages{kFlashSize / kPageSize};
@@ -43,7 +43,7 @@ union Metadata {
         uint32_t application_timestamp{0};
         uint32_t writing_timestamp{0};
         uint16_t length{0};
-        CRC32Type crc32{0};
+        CRCType crc{0};
     } structure;
 
     uint8_t(byte_array)[sizeof(StructureType)];
@@ -53,7 +53,7 @@ union Metadata {
 #endif
 static constexpr uint8_t kMetadataSize{sizeof(Metadata)};
 static_assert(kMetadataSize == sizeof(Metadata::byte_array), "kMetadataSize and byte_array size do not match!");
-static constexpr uint8_t kCRC32OffsetInMetadata{30};
+static constexpr uint8_t kCRCOffsetInMetadata{30};
 
 #ifdef TESTING
 #pragma pack(push, 1)
@@ -65,7 +65,7 @@ union Page {
         StructureType() = default;
         uint8_t page[kPageSize];
         DestinationAddreessType destination;
-        CRC32Type crc32;
+        CRCType crc;
     } structure;
     uint8_t(byte_array)[sizeof(StructureType)];
 };
@@ -91,14 +91,13 @@ enum class TEFlashResult
 class UartBoot
 {
 public:
-    UartBoot();
     const TEFlashResult main() const;
-    virtual__ const bool isCrcOk(const void *in, const uint8_t length, const CRC32Type &expectedCrc) const;
-    void writePageToFlash(const uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;
-    const TECommunicationResult readMetadata(Metadata &metadata) const;
-    const TECommunicationResult safeReadMetadata(Metadata &metadata) const;
-    const TECommunicationResult readPageWithMetadataFromHost(Page &page) const;
-    const TECommunicationResult safeReadPageWithMetadataFromHost(Page &page) const;
+    virtual__ const bool isCrcOk(const uint8_t *in, const uint8_t length, const CRCType &expectedCrc) const;
+    inline__ void writePageToFlash(const uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;
+    inline__ const TECommunicationResult readMetadata(Metadata &metadata) const;
+    inline__ const TECommunicationResult safeReadMetadata(Metadata &metadata) const;
+    inline__ const TECommunicationResult readPageWithMetadataFromHost(Page &page) const;
+    inline__ const TECommunicationResult safeReadPageWithMetadataFromHost(Page &page) const;
 #ifdef TESTING
     const Metadata decodeMetadata(const uint8_t (&in)[kMetadataSize]) const;
     virtual void writePageBufferToFlash(const uint16_t address) const;
@@ -114,5 +113,5 @@ public:
 #endif
 
 private:
-    uint32_t crc_table_[crc_table_size];
+    // uint32_t crc_table_[crc_table_size];
 };
