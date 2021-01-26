@@ -1,5 +1,5 @@
 #include "uartboot.h"
-#include <iostream>
+
 const bool UartBoot::isCrcOk(const uint8_t *in, const uint8_t length, const CRCType &expectedCrc) const
 {
     uint16_t crc{0x00};
@@ -7,7 +7,6 @@ const bool UartBoot::isCrcOk(const uint8_t *in, const uint8_t length, const CRCT
     {
         crc += in[i];
     }
-    std::cout << "computed crc: 0x" << std::hex << crc << std::endl;
     return crc == expectedCrc;
 }
 
