@@ -1,12 +1,8 @@
 package main
 
-import (
-	"hash/crc32"
-)
-
 const kPayloadInPageSize int = 128
 const kDestinationSize int = 2
-const kCRC32Size int = 4
+const kCRC32Size int = 2
 const kPageSize = kPayloadInPageSize + kDestinationSize + kCRC32Size
 
 const kOffsetDestination = kPayloadInPageSize
@@ -34,16 +30,12 @@ func pageToByteArray(page *Page) []byte {
 	return byteArray
 }
 
-func appendCRC32(page *Page, crcTable *crc32.Table) {
-
-	byteArray := make([]byte, kPayloadInPageSize+kDestinationSize)
+func appendCRC32(page *Page) {
+	computedCrc32 := uint16(0)
 	for i := 0; i < kPayloadInPageSize+kDestinationSize; i++ {
-		byteArray[i] = byte(page[i])
+		computedCrc32 += uint16(page[i])
 	}
-	computedCrc32 := crc32.Checksum(byteArray, crcTable)
 
-	page[kOffsetCRC32+3] = uint8(computedCrc32 >> 24)
-	page[kOffsetCRC32+2] = uint8(computedCrc32 >> 16)
 	page[kOffsetCRC32+1] = uint8(computedCrc32 >> 8)
 	page[kOffsetCRC32+0] = uint8(computedCrc32)
 }

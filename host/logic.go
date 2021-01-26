@@ -1,8 +1,6 @@
 package main
 
 import (
-	"hash/crc32"
-
 	myparser "github.com/mihaigalos/go-ihex/parser"
 )
 
@@ -18,9 +16,9 @@ type ProgressHandler interface {
 	Finish()
 }
 
-func doSend(page *Page, pageCount int, crcTable *crc32.Table, sendHandler SendHandler, progressHandler ProgressHandler, newProgress int) {
+func doSend(page *Page, pageCount int, sendHandler SendHandler, progressHandler ProgressHandler, newProgress int) {
 	appendDestination(page, pageCount)
-	appendCRC32(page, crcTable)
+	appendCRC32(page)
 	sendHandler.send(page, pageCount)
 
 	progressHandler.Update(newProgress)
@@ -35,8 +33,6 @@ func run(sendHandler SendHandler, progressHandler ProgressHandler, args []string
 	posInPage := 0
 	pageCount := 0
 
-	var crcTable = crc32.MakeTable(crc32.IEEE)
-
 	for _, line := range hexFile {
 		n := int(myparser.NumberOfBytes(line))
 		payload := myparser.Payload(line)
@@ -47,7 +43,7 @@ func run(sendHandler SendHandler, progressHandler ProgressHandler, args []string
 
 			if posInPage == kPayloadInPageSize {
 				newProgress := posInPage + pageCount*kPayloadInPageSize
-				doSend(&page, pageCount, crcTable, sendHandler, progressHandler, newProgress)
+				doSend(&page, pageCount, sendHandler, progressHandler, newProgress)
 				page = newPage()
 				posInPage = 0
 				pageCount++
@@ -57,7 +53,7 @@ func run(sendHandler SendHandler, progressHandler ProgressHandler, args []string
 
 	if posInPage != 0 {
 		newProgress := posInPage + pageCount*kPayloadInPageSize
-		doSend(&page, pageCount, crcTable, sendHandler, progressHandler, newProgress)
+		doSend(&page, pageCount, sendHandler, progressHandler, newProgress)
 		pageCount++
 	}
 	progressHandler.Finish()
