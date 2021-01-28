@@ -107,33 +107,6 @@ cc_binary(
 
 [
     cc_test(
-        name = "component/" + component_name,
-        srcs = glob([
-            "mcu/uartboot.cpp",
-            "mcu/uartboot.h",
-            "mcu/config.h",
-            "mcu/testing_helper.h",
-            "test/mcu/uartboot_testing_implementations.cpp",
-            "test/mcu/component/" + component_name + ".cpp",
-        ]),
-        copts = DEFAULT_TEST_COMPILE_OPTIONS,
-        includes = [
-            "mcu",
-        ],
-        linkopts = DEFAULT_TEST_LINK_OPTIONS,
-        tags = ["component"],
-        deps = DEFAULT_TEST_DEPS + [
-            "@avr-bootloader-common",
-        ],
-    )
-    for component_name in [
-        file_name.replace("test/mcu/component/", "").replace(".cpp", "")
-        for file_name in glob(["test/mcu/component/**/*.cpp"])
-    ]
-]
-
-[
-    cc_test(
         name = "unit/" + unit_name,
         srcs = glob([
             "mcu/uartboot.cpp",
@@ -156,6 +129,33 @@ cc_binary(
     for unit_name in [
         file_name.replace("test/mcu/unit/", "").replace(".cpp", "")
         for file_name in glob(["test/mcu/unit/**/*.cpp"])
+    ]
+]
+
+[
+    cc_test(
+        name = "component/" + component_name,
+        srcs = glob([
+            "mcu/uartboot.cpp",
+            "mcu/uartboot.h",
+            "mcu/config.h",
+            "mcu/testing_helper.h",
+            "test/mcu/uartboot_testing_implementations.cpp",
+            "test/mcu/component/" + component_name + ".cpp",
+        ]),
+        copts = DEFAULT_TEST_COMPILE_OPTIONS,
+        includes = [
+            "mcu",
+        ],
+        linkopts = DEFAULT_TEST_LINK_OPTIONS,
+        tags = ["component"],
+        deps = DEFAULT_TEST_DEPS + [
+            "@avr-bootloader-common",
+        ],
+    )
+    for component_name in [
+        file_name.replace("test/mcu/component/", "").replace(".cpp", "")
+        for file_name in glob(["test/mcu/component/**/*.cpp"])
     ]
 ]
 
