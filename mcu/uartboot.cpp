@@ -83,6 +83,7 @@ const TEFlashResult UartBoot::main() const
 
     if (TECommunicationResult::Ok == safeReadMetadata(metadata))
     {
+        LED_TOGGLE();
         eraseApplication();
         for (uint16_t i = 0; i < metadata.structure.length; ++i)
         {
