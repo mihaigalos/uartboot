@@ -90,3 +90,9 @@ go_repository(
     commit = "441e5080442f7d749bc26e61b9ff876ec64704d0",
     importpath = "github.com/mihaigalos/go-bar",
 )
+
+go_repository(
+    name = "go-yaml",
+    commit = "7649d4548cb53a614db133b2a8ac1f31859dda8c",
+    importpath = "github.com/go-yaml/yaml",
+)

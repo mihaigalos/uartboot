@@ -1,0 +1,7 @@
+lastFreeBytePointer: 0x00
+bootloaderName: "uartboot"
+applicationName: "demo......"
+applicationTimestamp: 0x600EEEF5
+writingTimestamp: 0x600EEEF5
+length: 2
+crc: 0x1234

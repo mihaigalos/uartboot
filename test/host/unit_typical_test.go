@@ -41,3 +41,41 @@ func TestNewPageWorks_whenTypical(t *testing.T) {
 		}
 	}
 }
+
+func TestMetadataYamlReadWorks_whenTypical(t *testing.T) {
+	expected := Metadata{
+		LastFreeBytePointer:  0x00,
+		BootloaderName:       "uartboot",
+		ApplicationName:      "demo......",
+		ApplicationTimestamp: 0x600EEEF5,
+		WritingTimestamp:     0x600EEEF5,
+		Length:               2,
+		Crc:                  0x1234,
+	}
+
+	m := Metadata{}
+	actual := m.readMetadata("test/host/demo_metadata.yaml")
+
+	if *actual != expected {
+		t.Errorf("No Match: %d != %d", actual, expected)
+	}
+}
+
+func TestMetadataYamlReadFails_whenNotWhatExpected(t *testing.T) {
+	expected := Metadata{
+		LastFreeBytePointer:  0xFF,
+		BootloaderName:       "uartboot",
+		ApplicationName:      "demo......",
+		ApplicationTimestamp: 0x600EEEF5,
+		WritingTimestamp:     0x600EEEF5,
+		Length:               2,
+		Crc:                  0x1234,
+	}
+
+	m := Metadata{}
+	actual := m.readMetadata("test/host/demo_metadata.yaml")
+
+	if *actual == expected {
+		t.Errorf("No Match: %d != %d", actual, expected)
+	}
+}

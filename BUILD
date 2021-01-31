@@ -217,7 +217,10 @@ go_test(
     srcs = [
         "test/host/unit_typical_test.go",
     ],
-    data = ["test/host/demo.hex"],
+    data = [
+        "test/host/demo.hex",
+        "test/host/demo_metadata.yaml",
+    ],
     embed = ["//host:host_lib"],
 )
 
