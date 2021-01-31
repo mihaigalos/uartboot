@@ -52,8 +52,8 @@ func TestMetadataYamlReadWorks_whenTypical(t *testing.T) {
 		Length:               2,
 		Crc:                  0x1234,
 	}
-
 	m := Metadata{}
+
 	actual := m.readMetadata("test/host/demo_metadata.yaml")
 
 	if *actual != expected {
@@ -71,8 +71,8 @@ func TestMetadataYamlReadFails_whenNotWhatExpected(t *testing.T) {
 		Length:               2,
 		Crc:                  0x1234,
 	}
-
 	m := Metadata{}
+
 	actual := m.readMetadata("test/host/demo_metadata.yaml")
 
 	if *actual == expected {
