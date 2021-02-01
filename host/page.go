@@ -36,6 +36,6 @@ func appendCRC32(page *Page) {
 		computedCrc32 += uint16(page[i])
 	}
 
-	page[kOffsetCRC32+1] = uint8(computedCrc32 >> 8)
 	page[kOffsetCRC32+0] = uint8(computedCrc32)
+	page[kOffsetCRC32+1] = uint8(computedCrc32 >> 8)
 }
