@@ -37,7 +37,7 @@ TEST_F(Fixture, ReadUartOk_WhenTypical)
             .RetiresOnSaturation();
     }
 
-    sut_.readMetadata(actual);
+    sut_.ReadMetadata(actual);
 
     for (uint8_t i = 0; i < kMetadataSize; ++i)
     {

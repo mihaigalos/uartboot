@@ -18,8 +18,8 @@ func newPage() Page {
 
 func appendDestination(page *Page, pageCount int) {
 	totalBytesWritten := pageCount * kPayloadInPageSize
-	page[kOffsetDestination+0] = uint8(totalBytesWritten >> 8)
-	page[kOffsetDestination+1] = uint8(totalBytesWritten)
+	page[kOffsetDestination+0] = uint8(totalBytesWritten)
+	page[kOffsetDestination+1] = uint8(totalBytesWritten >> 8)
 }
 
 func pageToByteArray(page *Page) []byte {

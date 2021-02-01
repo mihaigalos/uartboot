@@ -23,6 +23,10 @@ func (s SendHandlerImpl) send(page *Page, pageCount int) {
 	sendMock(page, pageCount)
 }
 
+func (s SendHandlerImpl) sendMetadata(metadata *Metadata){
+
+}
+
 type FakeProgressHandler struct{}
 
 func (p FakeProgressHandler) New(int, int) {

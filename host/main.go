@@ -29,10 +29,18 @@ func (s SendHandlerStdOutImpl) send(page *Page, pageCount int) {
 	send(page, pageCount, "serializePageToStdout")
 }
 
+func (s SendHandlerStdOutImpl) sendMetadata(metadata *Metadata) {
+	sendMetadata(metadata, "serializeMetadataToStdout")
+}
+
 type SendHandlerUsbImpl struct{}
 
 func (s SendHandlerUsbImpl) send(page *Page, pageCount int) {
 	send(page, pageCount, "serializePageToUsb")
+}
+
+func (s SendHandlerUsbImpl) sendMetadata(metadata *Metadata) {
+	sendMetadata(metadata, "serializeMetadataToUsb")
 }
 
 func main() {

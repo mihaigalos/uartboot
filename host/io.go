@@ -69,3 +69,22 @@ func send(page *Page, pageCount int, serializer string) {
 
 	fmt.Println("")
 }
+
+func serializeMetadataToStdout(metadata *Metadata) {
+	fmt.Println("\n")
+	byteArray := metadata.toByteArray()
+	for i := 0; i < kMetadataSize; i++ {
+		fmt.Printf("%02X", byteArray[i])
+		if (i+1)%16 == 0 && i != 0 {
+			fmt.Println("")
+		}
+	}
+}
+
+func sendMetadata(metadata *Metadata, serializer string) {
+	if "serializeMetadataToStdout" == serializer {
+		serializeMetadataToStdout(metadata)
+	}
+
+	fmt.Println("")
+}

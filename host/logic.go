@@ -8,6 +8,7 @@ type Page [kPageSize]byte
 
 type SendHandler interface {
 	send(page *Page, pageCount int)
+	sendMetadata(metadata *Metadata)
 }
 
 type ProgressHandler interface {
@@ -27,12 +28,15 @@ func doSend(page *Page, pageCount int, sendHandler SendHandler, progressHandler 
 func run(sendHandler SendHandler, progressHandler ProgressHandler, args []string) int {
 
 	hexFile := NewHexFile(args[0])
+	var m Metadata
+	metadata := m.ReadMetadata(args[1])
 	progressHandler.New(0, myparser.TotalNumberOfBytes(hexFile))
 
 	page := newPage()
 	posInPage := 0
 	pageCount := 0
 
+	sendHandler.sendMetadata(metadata)
 	for _, line := range hexFile {
 		n := int(myparser.NumberOfBytes(line))
 		payload := myparser.Payload(line)

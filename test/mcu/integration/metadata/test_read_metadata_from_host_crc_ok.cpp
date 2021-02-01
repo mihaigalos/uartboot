@@ -50,7 +50,7 @@ TEST_F(Fixture, ReadMetadataFromHostOk_WhenTypical)
     EXPECT_CALL(sut_, uart_read())
         .WillRepeatedly(Invoke(onUartRead));
 
-    actual = sut_.readMetadata(in);
+    actual = sut_.ReadMetadata(in);
 
     ASSERT_EQ(actual, expected);
 }

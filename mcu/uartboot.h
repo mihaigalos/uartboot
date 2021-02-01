@@ -94,7 +94,7 @@ public:
     const TEFlashResult main() const;
     virtual__ const bool isCrcOk(const uint8_t *in, const uint8_t length, const CRCType &expectedCrc) const;
     inline__ void writePageToFlash(const uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;
-    inline__ const TECommunicationResult readMetadata(Metadata &metadata) const;
+    inline__ const TECommunicationResult ReadMetadata(Metadata &metadata) const;
     inline__ const TECommunicationResult safeReadMetadata(Metadata &metadata) const;
     inline__ const TECommunicationResult readPageWithMetadataFromHost(Page &page) const;
     inline__ const TECommunicationResult safeReadPageWithMetadataFromHost(Page &page) const;
