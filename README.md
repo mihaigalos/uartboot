@@ -4,7 +4,12 @@
 
 ![CI](https://github.com/mihaigalos/uartboot/workflows/CI/badge.svg) [![codecov](https://codecov.io/gh/mihaigalos/uartboot/branch/main/graph/badge.svg?token=K1KVKCKIRG)](https://codecov.io/gh/mihaigalos/uartboot) [![license](https://img.shields.io/badge/license-GPLv3-brightgreen.svg)](LICENSE) [![LoC](https://tokei.rs/b1/github/mihaigalos/uartboot)](https://github.com/Aaronepower/tokei)
 
-An UART bootloader for Arduino/AVR. The implementation uses software UART / bit-bang on any microcontroller data pin.
+An UART bootloader for Arduino/AVR, <1kB.
+The implementation uses software UART / bit-bang on any microcontroller data pin.
+
+Usecases:
+* in-situ updates via i.e. USB-to-UART bridge.
+* remote software updates via i.e. RF-to-UART module.
 
 ### Build and Test
 
