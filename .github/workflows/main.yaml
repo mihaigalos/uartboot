@@ -37,7 +37,14 @@ jobs:
           sudo apt install lcov
           sudo apt install pkg-config
 
+      - name: Read secrets
+        run: |
+          CODECOV_TOKEN="${{ secrets.CODECOV_TOKEN }}"
+
       - name: Compute and publish Coverage Report
         run: |
           bazel coverage --instrumentation_filter="[:]" --instrument_test_targets=true --combined_report=lcov --sandbox_base=/run/shm //...
           genhtml bazel-out/_coverage/_coverage_report.dat --output-directory coverage
+
+          lcov --list bazel-out/_coverage/_coverage_report.dat
+          bash <(curl -s https://codecov.io/bash) -f bazel-out/_coverage/_coverage_report.dat || echo "Codecov did not collect coverage reports"
