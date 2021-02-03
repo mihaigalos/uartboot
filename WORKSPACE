@@ -75,7 +75,7 @@ git_repository(
 
 go_repository(
     name = "go-ihex",
-    commit = "ae68d14160fa206bb12d722cde0179356421ac8f",
+    commit = "709855444a57e34a1dec4665e9cea8ebc22a09f6",
     importpath = "github.com/mihaigalos/go-ihex",
 )
 
