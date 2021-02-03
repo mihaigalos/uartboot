@@ -20,7 +20,7 @@ git clone https://github.com/mihaigalos/uartboot.git && cd uartboot
 
 #### Baremetal
 
-Building and testing is managed by `bazel`, including dependencies to other repos such as [containers](https://github.com/mihaigalos/containers) (transparent to the end-user).
+Building and testing is managed by `bazel`, including dependencies to other repos.
 
 ```bash
 bazel build //...
