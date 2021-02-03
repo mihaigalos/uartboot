@@ -4,9 +4,7 @@
 
 ![CI](https://github.com/mihaigalos/uartboot/workflows/CI/badge.svg) [![codecov](https://codecov.io/gh/mihaigalos/uartboot/branch/main/graph/badge.svg?token=K1KVKCKIRG)](https://codecov.io/gh/mihaigalos/uartboot) [![license](https://img.shields.io/badge/license-GPLv3-brightgreen.svg)](LICENSE) [![LoC](https://tokei.rs/b1/github/mihaigalos/uartboot)](https://github.com/Aaronepower/tokei)
 
-An UART bootloader for Arduino/AVR.
-
-
+An UART bootloader for Arduino/AVR. The implementation uses software UART / bit-bang on any microcontroller data pin.
 
 ### Build and Test
 
@@ -36,7 +34,7 @@ rm bazel-* || true && docker run -it --rm --cap-add SYS_PTRACE -v $(pwd):/src -v
 
 Example flashing of `uartboot.hex`:
 ```
-sudo bazel-bin/host/host_/host  test/host/demo_blink.hex test/host/demo_metadata.yaml
+sudo bazel-bin/host/host_/host test/host/demo_blink.hex test/host/demo_metadata.yaml
 ```
 
 You can use CuteCom on Linux for debugging operations with the serial port.
