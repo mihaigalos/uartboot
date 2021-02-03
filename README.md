@@ -2,7 +2,7 @@
 
 # uartboot
 
-![CI](https://github.com/mihaigalos/uartboot/workflows/CI/badge.svg) [![license](https://img.shields.io/badge/license-GPLv3-brightgreen.svg)](LICENSE) [![LoC](https://tokei.rs/b1/github/mihaigalos/uartboot)](https://github.com/Aaronepower/tokei)
+![CI](https://github.com/mihaigalos/uartboot/workflows/CI/badge.svg) [![codecov](https://codecov.io/gh/mihaigalos/uartboot/branch/main/graph/badge.svg?token=K1KVKCKIRG)](https://codecov.io/gh/mihaigalos/uartboot) [![license](https://img.shields.io/badge/license-GPLv3-brightgreen.svg)](LICENSE) [![LoC](https://tokei.rs/b1/github/mihaigalos/uartboot)](https://github.com/Aaronepower/tokei)
 
 An UART bootloader for Arduino/AVR.
 
