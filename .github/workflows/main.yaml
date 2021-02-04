@@ -21,10 +21,15 @@ jobs:
         run: |
           sudo apt install lcov
           sudo apt install pkg-config
+          pip3 install -r scripts/requirements.txt
 
       - name: Build and Test
         run: |
           bazel test //... --color=yes --config=buildbuddy > >(tee -a /tmp/test.log) 2>&1
+
+      - name: Generate statistics
+        run: |
+          ./scripts/cl1p_build_buddy_invocation.sh
 
   converage:
     runs-on: ubuntu-20.04
