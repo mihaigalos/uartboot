@@ -12,5 +12,11 @@ build:trinket --crosstool_top=@avr_tools//tools/avr:toolchain_avr --distinct_hos
 build:trinket --cpu=avr
 build:trinket --define=MCU=attiny85
 
-
 test --test_output=all
+
+build:buildbuddy --bes_backend=grpcs://events.buildbuddy.io:1986
+build:buildbuddy --bes_results_url=https://app.buildbuddy.io/invocation/
+build:buildbuddy --profile=/tmp/test_profile
+build:buildbuddy --remote_cache=grpcs://cache.buildbuddy.io:1986
+build:buildbuddy --sandbox_base=/run/shm
+build:buildbuddy --show_progress_rate_limit=1
