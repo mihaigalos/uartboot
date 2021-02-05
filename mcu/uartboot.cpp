@@ -26,6 +26,16 @@ const TECommunicationResult UartBoot::ReadMetadata(Metadata &metadata) const
     {
         metadata.byte_array[i] = uart_read();
     }
+
+    for (uint8_t i = 0; i < kMetadataSize; ++i)
+    {
+        uart_write(metadata.byte_array[i]);
+    }
+    uart_write(' ');
+    uart_write(' ');
+    uart_write(' ');
+    uart_write(' ');
+    uart_write(isCrcOk(metadata.byte_array, sizeof(Metadata) - kSizeOfCRC32, metadata.structure.crc));
     if (!isCrcOk(metadata.byte_array, sizeof(Metadata) - kSizeOfCRC32, metadata.structure.crc))
     {
         return TECommunicationResult::CRCMismatch;

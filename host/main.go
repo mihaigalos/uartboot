@@ -45,6 +45,6 @@ func (s SendHandlerUsbImpl) sendMetadata(metadata *Metadata) {
 
 func main() {
 	argsWithoutProg := os.Args[1:]
-	pageCount := run(SendHandlerStdOutImpl{}, ProgressHandlerImpl{}, argsWithoutProg)
+	pageCount := run(SendHandlerUsbImpl{}, ProgressHandlerImpl{}, argsWithoutProg)
 	fmt.Printf("\n\nDone. Wrote %d pages.\n", pageCount+1)
 }
