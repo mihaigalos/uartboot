@@ -111,7 +111,7 @@ TEST_F(Fixture, MainMultiPageWrite_WhenMismatchOnSecondPage)
     EXPECT_CALL(sut_, writeToPageBuffer(_, _))
         .WillRepeatedly(Invoke([&](const uint16_t address, const uint8_t *data) { Fixture::onWriteToPageBuffer(address, data); }));
 
-    actual = sut_.main();
+    actual = sut_.run();
 
     ASSERT_EQ(actual, expected);
 }

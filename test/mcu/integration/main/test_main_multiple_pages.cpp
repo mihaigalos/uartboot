@@ -104,7 +104,7 @@ TEST_F(Fixture, MainSinglePageWriteOk_WhenTypical)
     EXPECT_CALL(sut_, writeToPageBuffer(_, _))
         .WillRepeatedly(Invoke([&](const uint16_t address, const uint8_t *data) { Fixture::onWriteToPageBuffer(address, data); }));
 
-    sut_.main();
+    sut_.run();
 
     for (uint16_t i = 0; i < sizeof(expected); ++i)
     {

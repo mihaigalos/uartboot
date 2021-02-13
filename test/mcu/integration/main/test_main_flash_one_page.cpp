@@ -61,7 +61,7 @@ TEST_F(Fixture, MainSinglePageWriteOk_WhenTypical)
     EXPECT_CALL(sut_, uart_read())
         .WillRepeatedly(Invoke(onUartRead));
 
-    actual = sut_.main();
+    actual = sut_.run();
 
     ASSERT_EQ(actual, expected);
 }
