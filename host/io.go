@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"time"
 
@@ -29,7 +30,7 @@ func serializePageToStdout(page *Page) {
 	}
 }
 
-func serializePageToUsb(page *Page) {
+func getUsbPort() io.ReadWriteCloser {
 	options := serial.OpenOptions{
 		PortName:        "/dev/ttyUSB0",
 		BaudRate:        38400,
@@ -43,9 +44,17 @@ func serializePageToUsb(page *Page) {
 		log.Fatalf("serial.Open: %v", err)
 	}
 
+	return port
+}
+
+func serializePageToUsb(page *Page) {
+
+	port := getUsbPort()
+
 	buf := make([]byte, 1)
+	byteArray := pageToByteArray(page)
 	for i := 0; i < kMaxTriesWithCommunicationFailure; i++ {
-		_, err = port.Write(pageToByteArray(page))
+		_, err := port.Write(byteArray)
 		time.Sleep(kWaitAfterWritePageMs * time.Millisecond)
 		_, err = port.Read(buf)
 		if TECommunicationResult(buf[0]) == Ok {
@@ -81,9 +90,27 @@ func serializeMetadataToStdout(metadata *Metadata) {
 	}
 }
 
+func serializeMetadataToUsb(metadata *Metadata) {
+	port := getUsbPort()
+	byteArray := metadata.toByteArray()
+	for i := 0; i < kMaxTriesWithCommunicationFailure; i++ {
+		_, err := port.Write(byteArray)
+		time.Sleep(kWaitAfterWritePageMs * time.Millisecond)
+		_, err = port.Read(buf)
+		if TECommunicationResult(buf[0]) == Ok {
+			fmt.Printf("Acknowledged.")
+			break
+		} else {
+			fmt.Printf("\n[%d] Error: received 0x%02X, expected 0x%02X (TECommunicationResult::Ok).", i, TECommunicationResult(buf[0]), Ok)
+		}
+	}
+}
+
 func sendMetadata(metadata *Metadata, serializer string) {
 	if "serializeMetadataToStdout" == serializer {
 		serializeMetadataToStdout(metadata)
+	} else if "serializeMetadataToUsb" == serialized {
+		serializeMetadataToUsb(metadata)
 	}
 
 	fmt.Println("")

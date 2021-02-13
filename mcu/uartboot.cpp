@@ -26,10 +26,22 @@ const TECommunicationResult UartBoot::ReadMetadata(Metadata &metadata) const
     {
         metadata.byte_array[i] = uart_read();
     }
+
+    for (uint8_t i = 0; i < kMetadataSize; ++i)
+    {
+        uart_write(metadata.byte_array[i]);
+    }
+    uart_write(' ');
+    uart_write(' ');
+    uart_write(' ');
+    uart_write(isCrcOk(metadata.byte_array, sizeof(Metadata) - kSizeOfCRC32, metadata.structure.crc));
     if (!isCrcOk(metadata.byte_array, sizeof(Metadata) - kSizeOfCRC32, metadata.structure.crc))
     {
         return TECommunicationResult::CRCMismatch;
     }
+
+    DDRB |= (1 << 1);
+    PORTB ^= (1 << 1);
 
     return TECommunicationResult::Ok;
 }
@@ -54,10 +66,21 @@ const TECommunicationResult UartBoot::readPageWithMetadataFromHost(Page &page) c
         page.byte_array[readBytes] = uart_read();
     }
 
+    for (uint8_t i = 0; i < kPageWithCrcAndDestinationSize; ++i)
+    {
+        uart_write(page.byte_array[i]);
+    }
+    uart_write(' ');
+    uart_write(' ');
+    uart_write(' ');
+    uart_write(isCrcOk(page.byte_array, kPageSize + kSizeOfDestinationAddress, page.structure.crc));
+
     if (!isCrcOk(page.byte_array, kPageSize + kSizeOfDestinationAddress, page.structure.crc))
     {
         return TECommunicationResult::CRCMismatch;
     }
+
+    PORTB ^= (1 << 1);
 
     return TECommunicationResult::Ok;
 }
