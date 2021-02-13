@@ -48,9 +48,9 @@ git_repository(
 
 git_repository(
     name = "avr_tools",
-    commit = "997c1096f95a12385addc9ecce7a6aae33ae933b",
+    commit = "2e8807f26478acea7ccaa608a70a1c345c9725bd",
     remote = "https://github.com/mihaigalos/bazel-avr-tools",
-    shallow_since = "1609321613 +0100",
+    shallow_since = "1613220917 +0100",
 )
 
 new_local_repository(

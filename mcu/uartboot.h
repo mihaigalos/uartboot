@@ -91,7 +91,7 @@ enum class TEFlashResult
 class UartBoot
 {
 public:
-    const TEFlashResult main() const;
+    const TEFlashResult run();
     virtual__ const bool isCrcOk(const uint8_t *in, const uint8_t length, const CRCType &expectedCrc) const;
     inline__ void writePageToFlash(const uint8_t (&in)[kPageWithCrcAndDestinationSize]) const;
     inline__ const TECommunicationResult ReadMetadata(Metadata &metadata) const;

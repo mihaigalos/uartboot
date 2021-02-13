@@ -75,7 +75,7 @@ const TECommunicationResult UartBoot::safeReadPageWithMetadataFromHost(Page &pag
     return result;
 }
 
-const TEFlashResult UartBoot::main() const
+const TEFlashResult UartBoot::run()
 {
     TEFlashResult result{TEFlashResult::Invalid};
 

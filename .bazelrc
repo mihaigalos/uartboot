@@ -3,10 +3,15 @@ run --define PROGR=arduino
 
 build --build_tag_filters=-mcu_binary_file --define MCU=none
 
-build:328p --crosstool_top=@avr_tools//tools/avr:toolchain_avr --distinct_host_configuration=false
-build:328p --cpu=avr
+build:avr_base --crosstool_top=@avr_tools//tools/avr:toolchain_avr --distinct_host_configuration=false
+build:avr_base --cpu=avr
+build:avr_base --build_tag_filters=mcu_binary_file
+
+build:328p --config=avr_base
 build:328p --define MCU=atmega328p
-build:328p --build_tag_filters=mcu_binary_file
+
+build:m4808 --config=avr_base
+build:m4808 --define MCU=avrxmega3
 
 build:trinket --crosstool_top=@avr_tools//tools/avr:toolchain_avr --distinct_host_configuration=false
 build:trinket --cpu=avr
