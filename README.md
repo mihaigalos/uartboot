@@ -41,7 +41,7 @@ rm bazel-* || true && docker run -it --rm --cap-add SYS_PTRACE -v $(pwd):/src -v
 
 Example flashing of `uartboot.hex`:
 ```
-sudo bazel-bin/host/host_/host test/host/demo_blink.hex test/host/demo_metadata.yaml
+sudo bazel-bin/host/host_/host test/host/demo_blink/demo_blink.hex test/host/demo_metadata.yaml
 ```
 
 You can use CuteCom on Linux for debugging operations with the serial port.
