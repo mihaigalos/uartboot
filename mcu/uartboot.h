@@ -32,6 +32,7 @@ using EEPROMEmulator = MemoryEmulator;
 #ifdef TESTING
 #pragma pack(push, 1)
 #endif
+
 union Metadata {
     Metadata() {}
     struct StructureType
@@ -48,16 +49,21 @@ union Metadata {
 
     uint8_t(byte_array)[sizeof(StructureType)];
 };
+
 #ifdef TESTING
 #pragma pack(pop)
 #endif
+
 static constexpr uint8_t kMetadataSize{sizeof(Metadata)};
 static_assert(kMetadataSize == sizeof(Metadata::byte_array), "kMetadataSize and byte_array size do not match!");
-static constexpr uint8_t kCRCOffsetInMetadata{30};
+
+static constexpr uint8_t kCRCOffsetInMetadata{ kMetadataSize - kSizeOfCRC32 };
+static_assert(kCRCOffsetInMetadata == 30, "kCRCOffsetInMetadata  and byte_array size do not match!");
 
 #ifdef TESTING
 #pragma pack(push, 1)
 #endif
+
 union Page {
     Page() = default;
     struct StructureType
@@ -69,6 +75,7 @@ union Page {
     } structure;
     uint8_t(byte_array)[sizeof(StructureType)];
 };
+
 #ifdef TESTING
 #pragma pack(pop)
 #endif
