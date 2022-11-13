@@ -38,13 +38,13 @@ union Metadata {
     struct StructureType
     {
         StructureType() {}
-        uint16_t last_free_byte_pointer{0};
+        uint16_t last_free_byte_pointer{};
         char bootloader_name[8]{'u', 'a', 'r', 't', 'b', 'o', 'o', 't'};
         char application_name[10]{'-', '-', '-', '-', '-', '-', '-', '-', '-', '-'};
-        uint32_t application_timestamp{0};
-        uint32_t writing_timestamp{0};
-        uint16_t length{0};
-        CRCType crc{0};
+        uint32_t application_timestamp{};
+        uint32_t writing_timestamp{};
+        uint16_t length{};
+        CRCType crc{};
     } structure;
 
     uint8_t(byte_array)[sizeof(StructureType)];
