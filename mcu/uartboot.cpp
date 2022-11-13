@@ -1,13 +1,13 @@
 #include "uartboot.h"
 
-const bool UartBoot::isCrcOk(const uint8_t *in, const uint8_t length, const CRCType &expectedCrc) const
+const TECommunicationResult UartBoot::isCrcOk(const uint8_t *in, const uint8_t length, const CRCType &expectedCrc) const
 {
     CRCType crc{};
     for (uint8_t i = 0; i < length; ++i)
     {
         crc += in[i];
     }
-    return crc == expectedCrc;
+    return crc == expectedCrc ? TECommunicationResult::Ok : TECommunicationResult::CRCMismatch;
 }
 
 void UartBoot::writePageToFlash(const uint8_t (&in)[kPageWithCrcAndDestinationSize]) const
@@ -26,12 +26,8 @@ const TECommunicationResult UartBoot::ReadMetadata(Metadata &metadata) const
     {
         metadata.byte_array[i] = uart_read();
     }
-    if (!isCrcOk(metadata.byte_array, kMetadataSize - kSizeOfCRC32, metadata.structure.crc))
-    {
-        return TECommunicationResult::CRCMismatch;
-    }
 
-    return TECommunicationResult::Ok;
+    return isCrcOk(metadata.byte_array, kMetadataSize - kSizeOfCRC32, metadata.structure.crc);
 }
 const TECommunicationResult UartBoot::safeReadMetadata(Metadata &metadata) const
 {
@@ -53,12 +49,7 @@ const TECommunicationResult UartBoot::readPageWithMetadataFromHost(Page &page) c
         page.byte_array[readBytes] = uart_read();
     }
 
-    if (!isCrcOk(page.byte_array, kPageSize + kSizeOfDestinationAddress, page.structure.crc))
-    {
-        return TECommunicationResult::CRCMismatch;
-    }
-
-    return TECommunicationResult::Ok;
+    return isCrcOk(page.byte_array, kPageSize + kSizeOfDestinationAddress, page.structure.crc);
 }
 
 const TECommunicationResult UartBoot::safeReadPageWithMetadataFromHost(Page &page) const
