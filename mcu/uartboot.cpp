@@ -26,7 +26,7 @@ const TECommunicationResult UartBoot::ReadMetadata(Metadata &metadata) const
     {
         metadata.byte_array[i] = uart_read();
     }
-    if (!isCrcOk(metadata.byte_array, sizeof(Metadata) - kSizeOfCRC32, metadata.structure.crc))
+    if (!isCrcOk(metadata.byte_array, kMetadataSize - kSizeOfCRC32, metadata.structure.crc))
     {
         return TECommunicationResult::CRCMismatch;
     }
