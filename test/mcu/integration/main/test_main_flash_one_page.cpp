@@ -25,7 +25,7 @@ public:
     }
     static uint8_t onUartRead()
     {
-        static uint8_t i{0};
+        static uint8_t i{};
         return data_[++i - 1];
     }
 

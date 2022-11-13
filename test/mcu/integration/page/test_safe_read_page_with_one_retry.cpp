@@ -39,7 +39,7 @@ public:
 
     static void onUartWrite(uint8_t in)
     {
-        static uint8_t i{0};
+        static uint8_t i{};
         transmit_to_host_buffer_[i++] = static_cast<TECommunicationResult>(in);
     }
 
@@ -60,7 +60,7 @@ uint8_t Fixture::data_[kPageWithCrcAndDestinationSize]{0x7e, 0x8a, 0x8b, 0xeb, 0
                                                        0xcb, 0x38, 0xaa, 0x28, 0x62, 0x85, 0x57, 0xbd, 0x7b, 0x82, 0x1e, 0xba, 0xfa, 0x21, 0xb0, 0xd6,
                                                        0x00, 0x00};
 TECommunicationResult Fixture::transmit_to_host_buffer_[8];
-uint8_t Fixture::pos_{0};
+uint8_t Fixture::pos_{};
 
 TEST_F(Fixture, SafeReadPageFromHostOneRetry_WhenTypical)
 {

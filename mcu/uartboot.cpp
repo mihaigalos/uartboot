@@ -29,6 +29,7 @@ const TECommunicationResult UartBoot::ReadMetadata(Metadata &metadata) const
 
     return isCrcOk(metadata.byte_array, kMetadataSize - kSizeOfCRC32, metadata.structure.crc);
 }
+
 const TECommunicationResult UartBoot::safeReadMetadata(Metadata &metadata) const
 {
     TECommunicationResult result{TECommunicationResult::Invalid};
@@ -42,7 +43,7 @@ const TECommunicationResult UartBoot::safeReadMetadata(Metadata &metadata) const
 
 const TECommunicationResult UartBoot::readPageWithMetadataFromHost(Page &page) const
 {
-    uint8_t readBytes{0};
+    uint8_t readBytes{};
 
     for (; readBytes < kPageWithCrcAndDestinationSize; ++readBytes)
     {

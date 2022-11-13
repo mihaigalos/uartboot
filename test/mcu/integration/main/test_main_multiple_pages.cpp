@@ -26,13 +26,13 @@ public:
     }
     static uint8_t onUartRead()
     {
-        static uint16_t i{0};
+        static uint16_t i{};
         return data_[++i - 1];
     }
 
     static void onWriteToPageBuffer(const uint16_t address, const uint8_t *data)
     {
-        static uint8_t page{0};
+        static uint8_t page{};
         for (uint8_t j = 0; j < kPageSize; ++j)
         {
             flash_buffer_[page + j] = data[j];
@@ -77,7 +77,7 @@ uint8_t Fixture::data_[kFlashSize]{
     0x01, 0x00,
     0x5B, 0x40};
 uint8_t Fixture::flash_buffer_[kFlashSize];
-uint16_t Fixture::pos_{0};
+uint16_t Fixture::pos_{};
 
 TEST_F(Fixture, MainSinglePageWriteOk_WhenTypical)
 {

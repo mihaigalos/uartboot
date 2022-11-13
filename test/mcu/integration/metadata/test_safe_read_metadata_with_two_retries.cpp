@@ -50,7 +50,7 @@ public:
 
     static void onUartWrite(uint8_t in)
     {
-        static uint8_t i{0};
+        static uint8_t i{};
         transmit_to_host_buffer_[i++] = static_cast<TECommunicationResult>(in);
     }
 
@@ -68,8 +68,8 @@ uint8_t Fixture::data_[kMetadataSize]{0xab, 0xd6, 0x9c, 0x3a, 0xd6, 0x22, 0xd1, 
                                       0xa9, 0x20, 0xcf, 0x28, 0x87, 0xab};
 
 TECommunicationResult Fixture::transmit_to_host_buffer_[8];
-uint8_t Fixture::pos_{0};
-uint8_t Fixture::retransmit_count_{0};
+uint8_t Fixture::pos_{};
+uint8_t Fixture::retransmit_count_{};
 
 TEST_F(Fixture, SafeReadMetadataFromHostTwoRetries_WhenTypical)
 {

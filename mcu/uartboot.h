@@ -33,7 +33,8 @@ using EEPROMEmulator = MemoryEmulator;
 #pragma pack(push, 1)
 #endif
 
-union Metadata {
+union Metadata
+{
     Metadata() {}
     struct StructureType
     {
@@ -64,7 +65,8 @@ static_assert(kCRCOffsetInMetadata == 30, "kCRCOffsetInMetadata  and byte_array 
 #pragma pack(push, 1)
 #endif
 
-union Page {
+union Page
+{
     Page() = default;
     struct StructureType
     {
