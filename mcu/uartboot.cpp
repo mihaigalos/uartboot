@@ -2,7 +2,7 @@
 
 const bool UartBoot::isCrcOk(const uint8_t *in, const uint8_t length, const CRCType &expectedCrc) const
 {
-    uint16_t crc{0x00};
+    CRCType crc{};
     for (uint8_t i = 0; i < length; ++i)
     {
         crc += in[i];
