@@ -12,7 +12,7 @@ const bool UartBoot::isCrcOk(const uint8_t *in, const uint8_t length, const CRCT
 
 void UartBoot::writePageToFlash(const uint8_t (&in)[kPageWithCrcAndDestinationSize]) const
 {
-    DestinationAddreessType destinationAddress{0};
+    DestinationAddreessType destinationAddress{};
     destinationAddress |= static_cast<DestinationAddreessType>(in[kDestinationAddressOffset + 0]) << 8;
     destinationAddress |= static_cast<DestinationAddreessType>(in[kDestinationAddressOffset + 1]);
 
@@ -35,7 +35,6 @@ const TECommunicationResult UartBoot::ReadMetadata(Metadata &metadata) const
 }
 const TECommunicationResult UartBoot::safeReadMetadata(Metadata &metadata) const
 {
-
     TECommunicationResult result{TECommunicationResult::Invalid};
     for (uint8_t tries = 0; tries < kMaxTriesWithCommunicationFailure && result != TECommunicationResult::Ok; ++tries)
     {
